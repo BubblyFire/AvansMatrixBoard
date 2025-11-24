@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Text
+{% endblock title %}
+
+{% block content %}
+
+<h1>Welcome back</h1>
+<br>
+
+<input type="color" id="colorPicker" value="#ff0000" title="Set PAINT color">
+<input name="text" id="textBox">
+<button type="button" id="sendButton">Send</button>
+
+<br>
+
+<input type="color" id="colorPicker2" value="#ff0000" title="Set PAINT color">
+<input name="text" id="textBox2">
+<button type="button" id="sendButton2">Send</button>
+
+<br>
+
+<input type="color" id="colorPicker3" value="#ff0000" title="Set PAINT color">
+<input name="text" id="textBox3">
+<button type="button" id="sendButton3">Send</button>
+
+<script>
+    document.getElementById('sendButton').addEventListener('click', function() {
+        let text = document.getElementById('textBox').value;
+        let userColor = document.getElementById('colorPicker').value;
+        $.ajax({ 
+            url: '/text2',
+            type: 'POST',
+            contentType: 'application/json', 
+            
+            data: JSON.stringify({ 'text': text, 'color': userColor, 'line': 0 }), 
+            success: function(response) { 
+                console.log('success'); 
+            }, 
+            error: function(error) { 
+                console.log(error); 
+            } 
+        }); 
+    });
+    document.getElementById('sendButton2').addEventListener('click', function() {
+        let text = document.getElementById('textBox2').value;
+        let userColor = document.getElementById('colorPicker2').value;
+        $.ajax({ 
+            url: '/text2',
+            type: 'POST',
+            contentType: 'application/json', 
+            
+            data: JSON.stringify({ 'text': text, 'color': userColor, 'line': 1 }), 
+            success: function(response) { 
+                console.log('success'); 
+            }, 
+            error: function(error) { 
+                console.log(error); 
+            } 
+        }); 
+    });
+    document.getElementById('sendButton3').addEventListener('click', function() {
+        let text = document.getElementById('textBox3').value;
+        let userColor = document.getElementById('colorPicker3').value;
+        $.ajax({ 
+            url: '/text2',
+            type: 'POST',
+            contentType: 'application/json', 
+            
+            data: JSON.stringify({ 'text': text, 'color': userColor, 'line': 2 }), 
+            success: function(response) { 
+                console.log('success'); 
+            }, 
+            error: function(error) { 
+                console.log(error); 
+            } 
+        }); 
+    });
+</script>
+
+{% endblock content %}

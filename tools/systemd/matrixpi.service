@@ -1,0 +1,13 @@
+[Unit]
+Description=matrixpi
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/avans/matrixpi
+ExecStart=/home/avans/matrixpi/.venv/bin/python server.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

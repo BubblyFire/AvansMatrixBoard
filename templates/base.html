@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <script src="/js/main.js" defer></script>
+    <script src="/extern/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="/extern/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% endblock head %}
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+<body class="bg-gray-100 dark:text-white dark:bg-gray-800">
+
+{% with messages = get_flashed_messages(with_categories=true, category_filter=["success", "info"]) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }}" style="width: 100%; z-index: 999">
+    {{ message }}
+    <a class="close" href="#" onclick="this.parentElement.remove(); return false">×</a>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<nav>
+<a href="{{ url_for('pages.core.home_route') }}">Home</a>
+<a href="{{ url_for('pages.core.text_route') }}">Text</a>
+<a href="{{ url_for('pages.core.draw_route') }}">Draw</a>
+<a href="{{ url_for('pages.core.image_route') }}">Image</a>
+{% block navigation %}
+<a href="{{ url_for('pages.core.imagepicker_route') }}">Pick an image</a>
+{% endblock navigation %}
+</nav>
+
+
+<main class="p-2">
+    {% block content %}
+    {% endblock content %}
+</main>
+{% block scripts %}
+{% endblock scripts %}
+<!-- Include Bootstrap JS -->
+<script src="/extern/ajax/jquery/3.5.1/jquery.min.js"></script>
+<script src="/extern/ajax/popper/1.16.0/popper.min.js"></script>
+<script src="/extern/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

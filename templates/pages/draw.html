@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Draw
+{% endblock title %}
+
+{% block content %}
+
+<h1>Welcome back</h1>
+<br>
+
+<div class="gridContainer">
+    <input type="color" id="colorPicker" value="#ff0000" title="Set PAINT color">
+    Current mode: <span id="modeDisplay">Drawing</span>
+    <button type="button" id="drawButton">Draw</button>
+    <button type="button" id="eraseButton">Erase</button>
+    <button type="button" id="clearButton">Clear</button>
+    <table id="pixelCanvas"></table>
+</div>
+
+{% endblock content %}

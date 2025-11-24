@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="/css/imagepicker.css"/>
+<script src="/js/imagepicker.js" defer></script>
+{% endblock head %}
+
+{% block title %}{% endblock title %}
+
+
+{% block navigation %}
+<a href="{{ url_for('pages.core.imagepicker_route') }}">Pick an image</a>
+{% endblock navigation %}
+
+{% block content %}
+
+<h1></h1>
+<p>Kies een figuur door te dubbelklikken.</p>
+<div class="gridContainer">
+<div id="dirs"></div>
+<div id="imgs"></div>
+</div>
+</div>
+
+
+{% endblock content %}
+
+{% block scripts %}
+<script>window.addEventListener('load', (ev)=>init())</script>
+{% endblock scripts %}

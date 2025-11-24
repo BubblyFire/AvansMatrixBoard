@@ -1,0 +1,6 @@
+rpi_ws281x
+Adafruit-Blinka==8.39.1
+adafruit-circuitpython-neopixel==6.3.11
+Flask==3.0.3
+pillow
+urllib3

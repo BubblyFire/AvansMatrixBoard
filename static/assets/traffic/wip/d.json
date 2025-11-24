@@ -1,0 +1,33 @@
+{
+    "dir" : "Categorie D - Rijrichting",
+    "desc": "Categorie D - Rijrichting",
+    "imgs":
+[
+{"src":"B01.jpg", "alt":"B01", "desc": "Voorrangsweg"},
+
+{"src":"D01.jpg", "alt": "D01", "desc": "Rotonde, verplichte rijrichting"},
+{"src":"D01-F.PNG", "alt": "D01-F", "desc": "Rotonde, verplichte rijrichting"},
+{"src":"D02-LO.jpg", "alt": "D02-LO", "desc": "Gebod voor alle bestuurders het bord voorbij te gaan aan de zijde die de pijl aangeeft"},
+{"src":"D02-RO.jpg", "alt": "D02-RO", "desc": "Gebod voor alle bestuurders het bord voorbij te gaan aan de zijde die de pijl aangeeft"},
+{"src":"D02-LB.jpg", "alt": "D02-LB", "desc": "Gebod voor alle bestuurders het bord voorbij te gaan aan de zijde die de pijl aangeeft"},
+{"src":"D02-RB.jpg", "alt": "D02-RB", "desc": "Gebod voor alle bestuurders het bord voorbij te gaan aan de zijde die de pijl aangeeft"},
+{"src":"D03.jpg", "alt": "D03", "desc": "Bord mag aan beide zijden worden voorbijgegaan"},
+{"src":"D04.jpg", "alt": "D04", "desc": "Gebod tot het volgen van de rijrichting die op het bord is aan gegeven"},
+{"src":"D05-L.jpg", "alt": "D05-L", "desc": "Gebod tot het volgen van de rijrichting die op het bord is aan gegeven"},
+
+{"src":"D05-R.jpg", "alt": "D05-R", "desc": "Gebod tot het volgen van de rijrichting die op het bord is aan gegeve$1"},
+{"src":"D06-L.jpg", "alt": "D06-L", "desc": "Gebod tot het volgen van &#E9;&#E9;n van de rijrichtingen die op het bord zijn aangegeven"},
+{"src":"D06-R.jpg", "alt": "D06-R", "desc": "Gebod tot het volgen van &#E9;&#E9;n van de rijrichtingen die op het bord zijn aangegeven"},
+{"src":"D07.jpg", "alt": "D07", "desc": "Gebod tot het volgen van &#E9;&#E9;n van de rijrichtingen die op het bord zijn aangegeve$1"},
+{"src":"D08.jpg", "alt": "D08", "desc": "Gebod tot het volgen van de rijrichting die op het bord is aan gegeve$1"},
+	
+{"src":"D02-LO_BB22.png", "alt": "D02-LO + BB22", "desc": "Verkeerszuil met bor$1"},
+{"src":"D02-RO_BB22.png", "alt": "D02-RO + BB22", "desc": "Verkeerszuil met bor$1"},
+{"src":"D03_BB22.png", "alt": "D03 + BB22", "desc": "Verkeerszuil met bor$1"},
+{"src":"D02-LO_BBX103-L.png", "alt": "D02-LO + BBX103-L", "desc": "verkeersgeleider met bord 'gebod voor alle bestuurders het bord voorbij te gaan aan de zijde die de pijl aangeeft'"},
+{"src":"D02-RO_BBX103-R.png", "alt": "D02-RO + BBX103-R", "desc": "verkeersgeleider met bord 'gebod voor alle bestuurders het bord voorbij te gaan aan de zijde die de pijl aangeeft'"},
+{"src":"D01_BB16-2.png", "alt": "D01 + BB16-2", "desc": "Schrikhek met bord$1"},
+{"src":"D01_BB18-2R.png", "alt": "D01 + BB18-2R", "desc": "Schrikhek met bord$1"},
+{"src":"D01_BB11-R_portaal.png", "alt": "D01 + BB11-R + portaal", "desc": "Portaal met schrikhek en bor$1"},
+{"src":"D01-F_BB18-1R_portaal.png", "alt": "D01-F + BB18-1R + portaal", "desc": "Portaal met schrikhek en bordop fluorescerende achtergron$1"}
+]}
