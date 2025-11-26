@@ -1,7 +1,9 @@
 
 URL = "imagelist"
 
-
+/*
+  Fetches directories and images from the server for a given path, then passes the returned data to buildUI() to display it.
+*/
 function getImages(path, parent){
     console.log(`getImages(${path}, ${parent})`)
     url = "imagelist"
@@ -21,6 +23,9 @@ function getImages(path, parent){
         });
 }
 
+/*
+  Sends the selected image path to the backend to display it on the LED matrix.
+*/
 function upload(path){
     console.log(`upload(${path})`)
     url = "imagelist_show"
@@ -41,6 +46,12 @@ function _$(id){
     return document.getElementById(id);
 }
 
+/*
+  Builds the folder tree UI:
+  - Creates collapsible folders
+  - Displays images inside folders
+  - Supports nested folder levels
+*/
 function buildUI(data, parent) {
     console.log("buildUI", data, parent);
 
@@ -51,9 +62,16 @@ function buildUI(data, parent) {
 
     // Directories
     data.dirs.forEach(dir => {
+        // ep = wrapper row for a folder
         const ep = document.createElement("div");
+
+        // eb = clickable folder button
         const eb = document.createElement("button");
+
+        // ec = collapsible container holding child content
         const ec = document.createElement("div");
+
+        // ef = container for child folders & images
         const ef = document.createElement("div");
 
         ep.classList.add("fullrow");
@@ -61,11 +79,14 @@ function buildUI(data, parent) {
         ec.classList.add("content", "fullrow");
         ef.classList.add("flexcontainer");
 
+        // Folder label with icon and name
         eb.innerHTML = `<img class="image" src="${dir.ico}" alt="${dir.alt}"><span> ${dir.desc}</span>`;
 
         eb.addEventListener("click", () => {
+            // Toggle the visual open/closed state
             eb.classList.toggle("active");
 
+            // Only load the folder contents the first time it's opened
             if (eb.classList.contains("active") && ef.childNodes.length === 0) {
                 getImages(dir.src, ef);
             }
@@ -81,9 +102,12 @@ function buildUI(data, parent) {
     data.imgs.forEach(i => {
         const e = document.createElement("div");
         e.classList.add("flexitem");
+
+        // Thumbnail image
         e.innerHTML = `<img class="fleximage" src="${i.src}" alt="${i.alt}" title="${i.desc}">`;
 
         e.addEventListener("click", () => {
+            // Remove previous selection highlight
             parent.querySelectorAll(".flexitem.selected").forEach(el => {
                 el.classList.remove("selected");
             });
