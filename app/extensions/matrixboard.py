@@ -5,10 +5,12 @@ from .bitmapfont import *
 
 class MatrixBoard:
     def __init__(self, width, height):
+        print("MATRIXBOARD CONSTR")
         self._width = width
         self._height = height
 
     def init(self):
+        print("MATRIXBOARD INIT")
         self._pixels = neopixel.NeoPixel(board.D18, self._width * self._height, auto_write=False, brightness=0.3)
         self.clear()
         self.show()
@@ -17,6 +19,7 @@ class MatrixBoard:
         self._bf.init()
 
     def _draw_pixel(self, x, y, color):
+        # print(f"Drawing {x},{y} {color}")
         try:
             index = self._coord_to_index(x, y)
         except Exception as e:
