@@ -41,52 +41,64 @@ function _$(id){
     return document.getElementById(id);
 }
 
-function buildUI(data, parent){
-    console.log(`buildUI(${data}}, ${parent})`);
-    console.log(data);
-  
-
-    data.dirs.forEach(dir =>{
-        var ep = document.createElement('div');
-        var eb = document.createElement('button');
-        var ec = document.createElement('div');
-        var ef = document.createElement('div');
-        ep.classList.add('fullrow');
-        eb.classList.add('collapsable');
-        ec.classList.add('content');
-        ec.classList.add('fullrow');
-        ef.classList.add('flexcontainer');
-        // ef.classList.add('');
-        eb.innerHTML = `<img class="image" src="${dir.ico}"><span> ${dir.desc}</span>`
-        eb.addEventListener('click', (ev)=>{
-            eb.classList.toggle('active'); 
-            ec.classList.toggle('content');
-            if (ef.childNodes.length == 0){
-                getImages(dir.src,ef);
-            }
-        })
-        eb.data = dir;
-        ep.appendChild(eb);
-        ec.appendChild(ef);
-        parent.appendChild(ep);
-        parent.appendChild(ec);
-    })
+function buildUI(data, parent) {
+    console.log("buildUI", data, parent);
 
 
-    data.imgs.forEach(i=>{
-        var e = document.createElement('div');
-        e.classList.add('flexitem')
-        e.innerHTML = `<img class="fleximage" src="${i.src}" alt="${i.alt}" title="${i.desc}">`
-        parent.appendChild(e);
-        e.addEventListener('click', ()=>{upload(i.src)})
-    })
-
-    if (data.imgs.length == 0 && data.dirs.length == 0){
-        parent.innerHTML='<div style="display:block;"><span>-- LEEG --</span></div>';
+    if (parent === _$("dirs")) {
+        parent.innerHTML = "";
     }
 
+    // Directories
+    data.dirs.forEach(dir => {
+        const ep = document.createElement("div");
+        const eb = document.createElement("button");
+        const ec = document.createElement("div");
+        const ef = document.createElement("div");
 
-    //   <div class="image">{{ img['url'] }}</div>
+        ep.classList.add("fullrow");
+        eb.classList.add("collapsable");
+        ec.classList.add("content", "fullrow");
+        ef.classList.add("flexcontainer");
+
+        eb.innerHTML = `<img class="image" src="${dir.ico}" alt="${dir.alt}"><span> ${dir.desc}</span>`;
+
+        eb.addEventListener("click", () => {
+            eb.classList.toggle("active");
+
+            if (eb.classList.contains("active") && ef.childNodes.length === 0) {
+                getImages(dir.src, ef);
+            }
+        });
+
+        ep.appendChild(eb);
+        ep.appendChild(ec);
+        ec.appendChild(ef);
+        parent.appendChild(ep);
+    });
+
+    // Images
+    data.imgs.forEach(i => {
+        const e = document.createElement("div");
+        e.classList.add("flexitem");
+        e.innerHTML = `<img class="fleximage" src="${i.src}" alt="${i.alt}" title="${i.desc}">`;
+
+        e.addEventListener("click", () => {
+            parent.querySelectorAll(".flexitem.selected").forEach(el => {
+                el.classList.remove("selected");
+            });
+            e.classList.add("selected");
+
+            upload(i.src);
+        });
+
+        parent.appendChild(e);
+    });
+
+    // No data
+    if (data.imgs.length === 0 && data.dirs.length === 0 && parent.childNodes.length === 0) {
+        parent.innerHTML = '<div style="display:block;"><span>-- LEEG --</span></div>';
+    }
 }
 
 function init(){

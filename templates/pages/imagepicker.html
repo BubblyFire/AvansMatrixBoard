@@ -1,33 +1,32 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<link rel="stylesheet" href="/css/imagepicker.css" />
-<script src="/js/imagepicker.js" defer></script>
+  {{ super() }}
+  <link rel="stylesheet" href="/css/imagepicker.css" />
+  <script src="/js/imagepicker.js" defer></script>
 {% endblock head %}
 
 {% block title %}
 Image Picker
 {% endblock title %}
 
-{% block navigation %}
-<li class="nav-item">
-  <a class="nav-link" href="{{ url_for('pages.core.imagepicker_route') }}">Pick an image</a>
-</li>
-{% endblock navigation %}
-
 {% block content %}
 
-<h1></h1>
-<p>Kies een figuur door te dubbelklikken.</p>
-<div class="gridContainer">
-<div id="dirs"></div>
-<div id="imgs"></div>
-</div>
-</div>
+<h1 class="mb-3">Pick an image</h1>
+<p class="text-muted">Browse the folders and select an image to display on the LED matrix.</p>
 
+<div class="card">
+  <div class="card-body">
+    <h6 class="text-muted mb-2">Folders</h6>
+    <div id="dirs" class="ip-sidebar">
+    </div>
+  </div>
+</div>
 
 {% endblock content %}
 
 {% block scripts %}
-<script>window.addEventListener('load', (ev)=>init())</script>
+<script>
+  window.addEventListener('load', () => init());
+</script>
 {% endblock scripts %}

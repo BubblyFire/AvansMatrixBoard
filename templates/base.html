@@ -47,22 +47,39 @@
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('pages.core.home_route') }}">Home</a>
+          <a class="nav-link {% if request.endpoint == 'pages.core.home_route' %}active{% endif %}"
+            href="{{ url_for('pages.core.home_route') }}">
+            Home
+          </a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('pages.core.text_route') }}">Text</a>
+          <a class="nav-link {% if request.endpoint == 'pages.core.text_route' %}active{% endif %}"
+            href="{{ url_for('pages.core.text_route') }}">
+            Text
+          </a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('pages.core.draw_route') }}">Draw</a>
+          <a class="nav-link {% if request.endpoint == 'pages.core.draw_route' %}active{% endif %}"
+            href="{{ url_for('pages.core.draw_route') }}">
+            Draw
+          </a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('pages.core.image_route') }}">Image</a>
+          <a class="nav-link {% if request.endpoint == 'pages.core.image_route' %}active{% endif %}"
+            href="{{ url_for('pages.core.image_route') }}">
+            Image
+          </a>
         </li>
-        {% block navigation %}
+
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('pages.core.imagepicker_route') }}">Pick an image</a>
+          <a class="nav-link {% if request.endpoint == 'pages.core.imagepicker_route' %}active{% endif %}"
+            href="{{ url_for('pages.core.imagepicker_route') }}">
+            Pick an image
+          </a>
         </li>
-        {% endblock navigation %}
       </ul>
     </div>
   </div>
