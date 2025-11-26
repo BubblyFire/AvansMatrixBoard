@@ -1,0 +1,15 @@
+{
+    "dir" : "Categorie AB - Objectbewegwijzering",
+    "desc": "Categorie AB - Objectbewegwijzering",
+    "dirs": [],
+    "imgs":
+[
+    { "src": "AB10-B_Sxx.png",   "alt": "AB10-B + Sxx (xx)", "desc": "Streekgrens"  },
+    { "src": "AB10-B-L_Sxx.png", "alt": "AB10-L + Sxx (xx)", "desc": "Streekgrens"},
+    { "src": "AB10-R_Sxx.png",   "alt": "AB10-R + Sxx (xx)", "desc": "Riviernaam"  },
+    { "src": "AB10.png",         "alt": "AB10", "desc": ""},
+    { "src": "AB10-B_SR01.png",  "alt": "AB10-B + SR01 (Gemeentehuis)", "desc": "Streekgrens"},
+    { "src": "AB10-L_SZ52.png",  "alt": "AB10-L + SZ52 (Schierand)", "desc": "Streekgrens"},
+    { "src": "AB10-R_SP10.png",  "alt": "AB10-R + SP10 (Politie)", "desc": "Riviernaam" }
+]
+}

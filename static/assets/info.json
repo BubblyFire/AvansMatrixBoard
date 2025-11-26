@@ -1,0 +1,10 @@
+{
+    "dir" : "",
+    "desc": "",
+    "dirs": 
+[
+    {"src": "traffic", "ico":"traffic.png", "alt": "Traffic", "desc": "Verkeer"},
+    {"src": "emoticons", "ico":"emoticons/face-laugh.svg", "alt": "Emoticons", "desc": "Emoticons"}
+],
+    "imgs": []
+}

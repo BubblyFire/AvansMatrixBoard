@@ -1,0 +1,19 @@
+*.png
+*.jpg
+*.svg
+*.gif
+*.jfif
+
+emoticons/**/*.svg
+emoticons/fontawesome-free-6.5.2-web/*
+emoticons/traffic/wip/*
+emoticons/traffic/*
+traffic/Categorie C - Gesloten verklaring/Categorie AB - Objectbewegwijzering/*
+
+traffic/wip/a.json
+traffic/wip/b.json
+traffic/wip/c.json
+traffic/wip/d.json
+traffic/wip/ef.json
+traffic/wip/*
+

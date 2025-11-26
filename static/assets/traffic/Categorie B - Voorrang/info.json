@@ -1,0 +1,23 @@
+{
+    "dir" : "Categorie B - Voorrang",
+    "desc": "Categorie B - Voorrang",
+    "dirs": [],
+    "imgs":
+[
+    {"src":"B01.jpg", "alt":"B01", "desc": "Voorrangsweg"},
+    {"src":"B02.jpg", "alt":"B02", "desc": "Einde voorrangsweg"},
+    {"src":"B03.png", "alt":"B03", "desc": "Voorrangs kruispunt"},
+    {"src":"B04.png", "alt":"B04", "desc": "Voorrangskruispunt zijweg links"},
+    {"src":"B05.png", "alt":"B05", "desc": "Voorrangs kruispunt zijweg rechts"},
+    {"src":"B06.png", "alt":"B06", "desc": "Verleen voorrang aan bestuurders op kruisende weg"},
+    {"src":"B07.png", "alt":"B07", "desc": "Stop en verleen voorrang aan bestuurders op de kruisende weg"},
+    {"src":"B06-F.png", "alt": "B06-F", "desc": "Verleen voorrang aan bestuurders op kruisende weg"},
+    {"src":"B06-OB02-1.png", "alt": "B06-F + OB02 + OB503", "desc": "Verleen voorrang aan fietsers (in 2 richtingen) op kruisende weg"},
+    {"src":"B06-OB02-2.png", "alt": "B06-F + OB401", "desc": "Verleen voorrang aan fietsers op kruisende weg na 50 meter"},
+    {"src":"B07-F.png", "alt": "B07-F", "desc": "Stop en verleen voorrang aan bestuurders op de kruisende weg"},
+    {"src":"B07-F_OB401.png", "alt": "B07-F + OB401", "desc": "Stop en verleen voorrang aan bestuurders op de kruisende weg na 100 m"},
+    {"src":"OB701-A.png", "alt":"OB701-A of OB711-A", "desc":"Afbuigende voorrangsweg"},
+    {"src":"OB702-A.png", "alt":"OB702-A of OB712-A", "desc": "Afbuigende voorrangsweg"},
+    {"src":"OB703-A.png", "alt": "OB703-A of OB713-A", "desc": "Afbuigende voorrangsweg"}
+]
+}

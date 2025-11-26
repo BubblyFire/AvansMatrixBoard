@@ -1,0 +1,13 @@
+{
+    "dir" : "",
+    "desc": "",
+    "dirs": 
+[
+    {"src": "Categorie A - Snelheid", "ico":"cat_a.png", "alt": "Categorie A - Snelheid", "desc": "Categorie A - Snelheid"},
+    {"src": "Categorie AB - Objectbewegwijzering", "ico":"cat_ab.png", "alt": "Categorie AB - Objectbewegwijzering", "desc": "Categorie AB - Objectbewegwijzering"},
+    {"src": "Categorie B - Voorrang", "ico":"cat_b.png", "alt": "Categorie B - Voorrang", "desc": "Categorie B - Voorrang"},
+    {"src": "Categorie C - Gesloten verklaring", "ico":"cat_c.png", "alt": "Categorie C - Gesloten verklaring", "desc": "Categorie C - Gesloten verklaring"},
+    {"src": "Categorie D - Rijrichting", "ico":"cat_d.png", "alt": "Categorie D - Rijrichting", "desc": "Categorie D - Rijrichting"}
+],
+    "imgs": []
+}

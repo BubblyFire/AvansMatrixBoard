@@ -1,0 +1,74 @@
+{
+    "dir" : "Categorie C - Gesloten verklaring",
+    "desc": "Categorie C - Gesloten verklaring",
+    "imgs":
+[
+{"src":"C01.jpg", "alt": "C01", "desc": "Gesloten in beide richtingen voor voertuigen, ruiters en geleiders van rij- of trekdieren of vee"},
+{"src":"C02.jpg", "alt": "C02", "desc": "Eenrichtingweg, in deze richting gesloten voor voertuigen, ruiters en geleiders van rij- of trekdieren of vee"},
+{"src":"C02-OB705-F.jpg", "alt": "C02-F + OB705", "desc": "Eenrichtingweg \"ga terug\", in deze richting gesloten voor voertuigen, ruiters en geleiders van rij- of trekdieren of vee"},
+{"src":"C03.jpg", "alt": "C03", "desc": "Eenrichtingweg"},
+{"src":"C04-L.jpg", "alt": "C04-L", "desc": "Eenrichtingweg Links"},
+{"src":"C04-R.jpg", "alt": "C04-R", "desc": "Eenrichtingweg Rechts"},
+{"src":"C05.jpg", "alt": "C05", "desc": "Inrijden toegestaan"},
+{"src":"C06.jpg", "alt": "C06", "desc": "Gesloten voor motorvoertuigen op meer dan twee wielen"},
+{"src":"C07.jpg", "alt": "C07", "desc": "Gesloten voor vrachtauto&#39;s"},
+
+{"src":"C07-A.jpg", "alt": "C07-A", "desc": "Gesloten voor autobussen"},
+{"src":"C07-B.jpg", "alt": "C07-B", "desc": "Gesloten voor autobussen en vrachtauto&#39;s"},
+{"src":"kdpwlke.png", "alt": "C07-C", "desc": "Gesloten voor campers"},
+{"src":"C08.jpg", "alt": "C08", "desc": "Gesloten voor motorvoertuigen die niet sneller kunnen of mogen rijden dan 25 km/h"},
+{"src":"C09.jpg", "alt": "C09", "desc": "Gesloten voor ruiters, vee, wagens, motorvoertuigen die niet sneller kunnen of mogen rijden dan 25 km/h en brommobiel en alsmede fietsen, bromfietsen en gehandicapten voertuigen"},
+{"src":"C10.jpg", "alt": "C10", "desc": "Gesloten voor motorvoertuigen met aanhang wagen"},
+{"src":"C11.jpg", "alt": "C11", "desc": "Gesloten voor motorfietsen"},
+{"src":"C12.jpg", "alt": "C12", "desc": "Gesloten voor alle motorvoertuigen"},
+{"src":"C13.jpg", "alt": "C13", "desc": "Gesloten voor bromfietsen, snor fietsen en gehandicaptenvoertuigen, met in werking zijnde motor"},
+
+{"src":"C14.jpg", "alt": "C14", "desc": "Gesloten voor fietsen en voor gehandicapten voertuigen zonder motor"},
+{"src":"C15.jpg", "alt": "C15", "desc": "Gesloten voor fietsen, bromfietsen en voor gehandicaptenvoertuigen"},
+{"src":"C16.jpg", "alt": "C16", "desc": "Gesloten voor voetgangers"},
+{"src":"C17.jpg", "alt": "C17 (10m)", "desc": "Gesloten voor voertuigen en samen stellen van voertuigen die, met inbegrip van lading, langer zijn dan op het bord is aangegeven"},
+{"src":"C18.jpg", "alt": "C18 (2,3m)", "desc": "Gesloten voor voertuigen die, met inbegrip van lading, breder zijn dan op het bord is aangegeven"},
+{"src":"C19.jpg", "alt": "C19 (3,1m)", "desc": "Gesloten voor voertuigen die, met inbegrip van lading, hoger zijn dan op het bord is aangegeven"},
+{"src":"C20.jpg", "alt": "C20 (4,8t)", "desc": "Gesloten voor voertuigen waarvan de aslast hoger is dan op het bord is aangegeven"},
+{"src":"C21.jpg", "alt": "C21 (5,4t)", "desc": "Gesloten voor voertuigen en samenstellen van voertuigen waarvan de totaalmassa hoger is dan op het bord is aangegeven"},
+{"src":"C22.jpg", "alt": "C22", "desc": "Gesloten voor voertuigen met bepaalde gevaarlijke stoffen"},
+
+{"src":"C23.PNG", "alt": "C23", "desc": "Gesloten voor snorfietsen"},
+{"src":"C22-A.jpg", "alt": "C22-A", "desc": "Gesloten voor personen- en bedrijfsauto&#39;s of vrachtauto&#39;s met een dieselmotor vanwege milieuzone."},
+{"src":"C22-B.jpg", "alt": "C22-B", "desc": "Einde gesloten verklaring milieuzone"},
+{"src":"C22-C.png", "alt": "C22-C", "desc": "Gesloten voor bedrijfs en vrachtauto&#39;s vanwege nul emissiezone"},
+{"src":"C22-C1.PNG", "alt": "C22-C1", "desc": "Onderbord bij bord C22-C: nulemissiezone toegankelijk voor emissieloze bedrijfs en vrachtauto&#39;s"},
+{"src":"C22-D.png", "alt": "C22-D", "desc": "Einde gesloten verklaring voor bedrijfs- en vrachtauto&#39;s vanwege nul emissiezone"},
+
+{"src":"C22-A1.png", "alt": "C22-A1", "desc": "Onderbord bij bord C22-A: milieuzone toegankelijk voor personen- en bedrijfsauto&#39;s emissie klasse 3 t/m 6"},
+{"src":"C22-A2.png", "alt": "C22-A2", "desc": "Onderbord bij bord C22-A: milieuzone toegankelijk voor personen- en bedrijfsauto&#39;s emissie klasse 4 t/m 6"},
+{"src":"C22-A3.png", "alt": "C22-A3", "desc": "Onderbord bij bord C22-A: milieuzone toegankelijk voor personen- en bedrijfsauto&#39;s emissie klasse 5 en 6"},
+{"src":"C22-A4.png", "alt": "C22-A4", "desc": "Onderbord bij bord C22-A: milieuzone toegankelijk voor vrachtauto&#39;s emissieklasse 4 t/m 6"},
+{"src":"C22-A5.png", "alt": "C22-A5", "desc": "Onderbord bij bord C22-A: milieuzone toegankelijk voor vrachtauto&#39;s emissieklasse 6"},
+{"src":"C22-A6.png", "alt": "C22-A6", "desc": "Onderbord bij bord C22-A: milieuzone toegankelijk voor bussen emissie klasse 4 t/m 6"},
+{"src":"C22-A7.png", "alt": "C22-A7", "desc": "Onderbord bij bord C22-A: milieuzone toegankelijk voor bussen emissie klasse 6"},
+{"src":"C22-A8.png", "alt": "C22-A8", "desc": "Onderbord bij bord C22-A: milieuzone toegankelijk voor vrachtauto&#39;s en bussen emissie klasse 4 t/m 6"},
+{"src":"C22-A9.png", "alt": "C22-A9", "desc": "Onderbord bij bord C22-A: milieuzone toegankelijk voor vrachtauto&#39;s en bussen emissieklasse 6"},
+
+{"src":"C23-01.png", "alt": "C23-01", "desc": "Spitsstrook open"},
+{"src":"C23-02.png", "alt": "C23-02", "desc": "Spitsstrook vrijmaken"},
+{"src":"C23-03.png", "alt": "C23-03", "desc": "Einde spitsstrook"},
+
+{"src":"Cxx-ZB.jpg", "alt": "Cxx-ZB", "desc": ""},
+{"src":"cxx-ZH.jpg", "alt": "Cxx-ZH", "desc": ""},
+{"src":"Cxx-ZE.png", "alt": "Cxx-ZE", "desc": ""},
+
+{"src":"C06-ZB.png", "alt": "C06-ZB", "desc": "Zone gesloten voor motorvoer tuigen op meer dan twee wielen"},
+{"src":"C06-ZH.png", "alt": "C06-ZH", "desc": "Herhaling zone gesloten voor motor voertuigen op meer dan twee wielen"},
+{"src":"C06-ZE.png", "alt": "C06-ZE", "desc": "Einde zone gesloten voor motor voertuigen op meer dan twee wielen"},
+{"src":"C12-ZB.png", "alt": "C12-ZB", "desc": "Zone gesloten voor alle motor voertuigen"},
+{"src":"C12-ZH.png", "alt": "C12-ZH", "desc": "Herhaling zone gesloten voor alle motorvoertuigen"},
+{"src":"C12-ZE.png", "alt": "C12-ZE", "desc": "Einde zone gesloten voor alle motorvoertuigen"},
+{"src":"C07-ZB.png", "alt": "C07-ZB", "desc": "Zone gesloten voor vrachtwagens"},
+{"src":"C07-ZH.png", "alt": "C07-ZH", "desc": "Herhaling zone gesloten voor vrachtwagens"},
+{"src":"C07-ZE.png", "alt": "C07-ZE", "desc": "Einde zone gesloten voor vrachtwagens"}
+
+],
+"dirs":[
+]
+}
