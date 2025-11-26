@@ -6,16 +6,31 @@ Draw
 
 {% block content %}
 
-<h1>Welcome back</h1>
-<br>
+<h1 class="mb-3">Draw on the Matrix</h1>
+<p class="text-muted">Use the grid below to paint pixels that will be sent to the LED matrix.</p>
 
-<div class="gridContainer">
-    <input type="color" id="colorPicker" value="#ff0000" title="Set PAINT color">
-    Current mode: <span id="modeDisplay">Drawing</span>
-    <button type="button" id="drawButton">Draw</button>
-    <button type="button" id="eraseButton">Erase</button>
-    <button type="button" id="clearButton">Clear</button>
-    <table id="pixelCanvas"></table>
+<div class="card">
+  <div class="card-body">
+    <div class="form-row align-items-center mb-3">
+      <div class="col-12 col-md-3 mb-2 mb-md-0">
+        <label for="colorPicker" class="small mb-1">Paint color</label>
+        <input type="color" id="colorPicker" value="#ff0000" title="Set PAINT color" class="form-control p-0">
+      </div>
+      <div class="col-12 col-md-3 mb-2 mb-md-0">
+        <span class="small text-muted d-block">Current mode:</span>
+        <span id="modeDisplay" class="font-weight-bold">Drawing</span>
+      </div>
+      <div class="col-12 col-md-6 text-md-right">
+        <button type="button" id="drawButton" class="btn btn-primary mb-1">Draw</button>
+        <button type="button" id="eraseButton" class="btn btn-secondary mb-1">Erase</button>
+        <button type="button" id="clearButton" class="btn btn-outline-danger mb-1">Clear</button>
+      </div>
+    </div>
+
+    <div class="gridContainer" style="overflow-x:auto;">
+      <table id="pixelCanvas"></table>
+    </div>
+  </div>
 </div>
 
 {% endblock content %}

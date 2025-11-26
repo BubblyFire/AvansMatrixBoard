@@ -2,46 +2,82 @@
 <html lang="en">
 <head>
     {% block head %}
-    <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="/css/main.css"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- CSS + JS -->
+    <link rel="stylesheet" href="/css/main.css" />
     <script src="/js/main.js" defer></script>
+
+    <!-- jQuery -->
     <script src="/extern/jquery-3.7.1.min.js"></script>
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/extern/bootstrap/4.5.2/css/bootstrap.min.css">
     {% endblock head %}
-    <title>{% block title %}{% endblock title %}</title>
+    <title>{% block title %}{% endblock title %} - AvansMatrixBoard</title>
 </head>
-<body class="bg-gray-100 dark:text-white dark:bg-gray-800">
+<body class="bg-light">
 
 {% with messages = get_flashed_messages(with_categories=true, category_filter=["success", "info"]) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }}" style="width: 100%; z-index: 999">
-    {{ message }}
-    <a class="close" href="#" onclick="this.parentElement.remove(); return false">×</a>
-</div>
-{% endfor %}
-{% endif %}
+  {% if messages %}
+    <div class="container mt-2">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 {% endwith %}
 
-<nav>
-<a href="{{ url_for('pages.core.home_route') }}">Home</a>
-<a href="{{ url_for('pages.core.text_route') }}">Text</a>
-<a href="{{ url_for('pages.core.draw_route') }}">Draw</a>
-<a href="{{ url_for('pages.core.image_route') }}">Image</a>
-{% block navigation %}
-<a href="{{ url_for('pages.core.imagepicker_route') }}">Pick an image</a>
-{% endblock navigation %}
+<!-- Responsive Navbar -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url_for('pages.core.home_route') }}">AvansMatrixBoard</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar"
+            aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('pages.core.home_route') }}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('pages.core.text_route') }}">Text</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('pages.core.draw_route') }}">Draw</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('pages.core.image_route') }}">Image</a>
+        </li>
+        {% block navigation %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('pages.core.imagepicker_route') }}">Pick an image</a>
+        </li>
+        {% endblock navigation %}
+      </ul>
+    </div>
+  </div>
 </nav>
 
-
-<main class="p-2">
-    {% block content %}
-    {% endblock content %}
+<!-- Page content -->
+<main class="container pb-4">
+  {% block content %}
+  {% endblock content %}
 </main>
+
 {% block scripts %}
 {% endblock scripts %}
-<!-- Include Bootstrap JS -->
-<script src="/extern/ajax/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Bootstrap JS -->
 <script src="/extern/ajax/popper/1.16.0/popper.min.js"></script>
 <script src="/extern/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

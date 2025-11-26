@@ -1,15 +1,18 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<link rel="stylesheet" href="/css/imagepicker.css"/>
+<link rel="stylesheet" href="/css/imagepicker.css" />
 <script src="/js/imagepicker.js" defer></script>
 {% endblock head %}
 
-{% block title %}{% endblock title %}
-
+{% block title %}
+Image Picker
+{% endblock title %}
 
 {% block navigation %}
-<a href="{{ url_for('pages.core.imagepicker_route') }}">Pick an image</a>
+<li class="nav-item">
+  <a class="nav-link" href="{{ url_for('pages.core.imagepicker_route') }}">Pick an image</a>
+</li>
 {% endblock navigation %}
 
 {% block content %}
