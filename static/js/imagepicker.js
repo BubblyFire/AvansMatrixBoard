@@ -55,7 +55,6 @@ function _$(id){
 function buildUI(data, parent) {
     console.log("buildUI", data, parent);
 
-
     if (parent === _$("dirs")) {
         parent.innerHTML = "";
     }

@@ -19,3 +19,18 @@ def show_file(path: str) -> None:
             matrixpi.matrixboard._draw_pixel(x, y, pixel[:3])
     print(path)
     matrixpi.matrixboard.show()
+
+
+def safe_join_under_root(root: str, *paths: str) -> str:
+    # Filter lege stukken, strip slashes
+    clean_parts = [p.strip("/").strip("\\") for p in paths if p]
+    joined = os.path.join(root, *clean_parts)
+
+    # Canonicaliseer pad
+    real_root = os.path.realpath(root)
+    real_path = os.path.realpath(joined)
+
+    if not real_path.startswith(real_root):
+        raise ValueError("Path escapes restricted root")
+
+    return real_path

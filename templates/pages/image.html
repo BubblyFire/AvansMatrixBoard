@@ -1,61 +1,117 @@
 {% extends 'base.html' %}
 
+{% block head %}
+  {{ super() }}
+  <script src="/js/server.js" defer></script>
+{% endblock head %}
+
 {% block title %}
-Image
+Matrix Image Upload
 {% endblock title %}
 
 {% block content %}
 
-<h1 class="mb-3">Upload Image</h1>
-<p class="text-muted">Upload an image to display it on the LED matrix. It will be resized to fit.</p>
+<h1 class="mb-3">Matrix Image Upload</h1>
+<p class="text-muted">
+  Kies een afbeelding vanaf je computer of vanuit de Raspberry Pi file browser.
+</p>
 
 <div class="row">
-  <div class="col-12 col-md-8 col-lg-6">
-    <form method="post" enctype="multipart/form-data" class="border rounded p-3 bg-white">
-      <div class="form-group">
-        <label for="file" class="small mb-1">Choose image file</label>
-        <input type="file" name="file" id="file" class="form-control-file">
-      </div>
-      <div id="previewContainer" class="mb-3" style="display:none;">
-        <label class="small mb-1 d-block">Preview</label>
-        <img id="imagePreview" 
-             src="#" 
-             alt="Preview" 
-             class="img-fluid rounded border"
-             style="max-height: 220px; object-fit: contain;">
-      </div>
 
-      <button type="submit" class="btn btn-primary">Upload and display</button>
-    </form>
-    </form>
+  <!-- LOCAL FILE PICKER ------------------------------------------- -->
+  <div class="col-12 col-lg-6 mb-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Local File Picker</h5>
+        <p class="text-muted small">Selecteer een afbeelding van jouw computer.</p>
+
+        <input type="file" id="localFileInput" class="form-control mb-3"
+               accept=".jpg,.jpeg,.png,.gif,.bmp">
+
+        <div id="localPreview" style="display:none;">
+          <label class="small text-muted">Preview:</label>
+          <img id="localPreviewImg"
+               class="img-fluid border rounded"
+               style="max-height: 200px; object-fit: contain;">
+        </div>
+
+        <button id="uploadLocalBtn" class="btn btn-primary mt-3 w-100">
+          Upload (local → Pi)
+        </button>
+      </div>
+    </div>
   </div>
+
+
+  <!-- PI FILE PICKER ------------------------------------------------ -->
+  <div class="col-12 col-lg-6 mb-4">
+    <div class="card h-100">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title">Raspberry Pi File Picker</h5>
+          <button class="btn btn-sm btn-outline-secondary" id="createFolderBtn">
+            Nieuw mapje
+          </button>
+        </div>
+
+        <p class="text-muted small">Blader door bestanden die al op de Pi staan.</p>
+
+        <!-- Breadcrumb -->
+        <div id="piBreadcrumb" class="small text-muted mb-2">/</div>
+
+        <!-- File browser -->
+        <div id="piBrowser"
+             class="border rounded p-2"
+             style="height:250px; overflow-y:auto; background:#fafafa;">
+          <div class="text-muted">Loading…</div>
+        </div>
+
+        <div class="mt-3">
+          <label class="small text-muted">Geselecteerd bestand:</label>
+          <div class="form-control bg-light small" id="piSelectedFile">–</div>
+
+          <div id="piPreview" class="mt-2" style="display:none;">
+            <label class="small text-muted">Preview:</label>
+            <img id="piPreviewImg"
+                 class="img-fluid border rounded"
+                 style="max-height:200px; object-fit: contain;">
+          </div>
+        </div>
+
+        <button id="usePiFileBtn" class="btn btn-primary mt-3 w-100">
+          Use Selected Pi File
+        </button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 {% endblock content %}
 
 {% block scripts %}
+
 <script>
-  const fileInput = document.getElementById('file');
-  const previewContainer = document.getElementById('previewContainer');
-  const imagePreview = document.getElementById('imagePreview');
+// Local file picker
+const localFileInput = document.getElementById("localFileInput");
+const localPreview = document.getElementById("localPreview");
+const localPreviewImg = document.getElementById("localPreviewImg");
 
-  fileInput.addEventListener('change', function() {
-    const file = this.files[0];
+localFileInput.addEventListener("change", () => {
+  const file = localFileInput.files[0];
+  if (!file) {
+    localPreview.style.display = "none";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    localPreviewImg.src = e.target.result;
+    localPreview.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+});
 
-    if (!file || !file.type.startsWith('image/')) {
-      previewContainer.style.display = 'none';
-      imagePreview.src = '#';
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-      imagePreview.src = e.target.result;
-      previewContainer.style.display = 'block';
-    };
-
-    reader.readAsDataURL(file);
-  });
+window.addEventListener('load', () => init());
 </script>
 {% endblock scripts %}
