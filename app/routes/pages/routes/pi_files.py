@@ -2,6 +2,7 @@ import os
 import mimetypes
 
 from flask import request, jsonify, send_file
+from werkzeug.utils import secure_filename 
 
 from ..blueprint import core_bp
 from ..utils.config import FILE_BROWSER_ROOT
@@ -10,7 +11,8 @@ from ..utils.utils import safe_join_under_root, show_file
 
 @core_bp.route("/pi/files", methods=["POST"])
 def pi_files_list():
-    rel_path = (request.args.get("path") or "").strip("/")
+    data = request.get_json(silent=True) or {}
+    rel_path = (data.get("path") or "").strip("/")
 
     try:
         abs_path = safe_join_under_root(FILE_BROWSER_ROOT, rel_path)
@@ -39,7 +41,7 @@ def pi_files_list():
     )
 
 
-@core_bp.route("/pi/mkdir", methods=["POST"])
+@core_bp.route("/pi/dir/mkdir", methods=["POST"])
 def pi_files_mkdir():
     data = request.get_json() or {}
     rel_path = (data.get("path") or "").strip("/")
@@ -93,3 +95,35 @@ def pi_files_use():
     show_file(abs_path)
 
     return jsonify({"ok": True})
+
+@core_bp.route("/pi/file/upload", methods=["POST"])
+def pi_file_upload():
+    if "file" not in request.files:
+        return jsonify({"error": "missing file"}), 400
+
+    f = request.files["file"]
+    if f.filename == "":
+        return jsonify({"error": "empty filename"}), 400
+
+    rel_path = (request.form.get("path") or "").strip("/")
+    filename = secure_filename(f.filename)
+
+    try:
+        target_dir = safe_join_under_root(FILE_BROWSER_ROOT, rel_path)
+    except ValueError:
+        return jsonify({"error": "invalid path"}), 400
+
+    try:
+        os.makedirs(target_dir, exist_ok=True)
+    except OSError as e:
+        return jsonify({"error": str(e)}), 500
+
+    target_abs = os.path.join(target_dir, filename)
+    try:
+        f.save(target_abs)
+    except OSError as e:
+        return jsonify({"error": str(e)}), 500
+
+    rel_saved = "/".join(p for p in [rel_path, filename] if p)
+
+    return jsonify({"ok": True, "path": rel_saved})

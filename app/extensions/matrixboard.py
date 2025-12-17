@@ -2,6 +2,7 @@ import time
 import board
 import neopixel
 from .bitmapfont import *
+from .config import load_matrix_config
 
 class MatrixBoard:
     def __init__(self, width, height):
@@ -9,9 +10,19 @@ class MatrixBoard:
         self._width = width
         self._height = height
 
+        self._config = load_matrix_config()
+        self._scroll_delay = self._config.get("scroll_delay", 0.1)
+        self._font_offset = self._config.get("font_baseline_offset", 3)
+
     def init(self):
         print("MATRIXBOARD INIT")
-        self._pixels = neopixel.NeoPixel(board.D18, self._width * self._height, auto_write=False, brightness=0.3)
+        pin_name = self._config.get("pin", "D18")
+        pin = getattr(board, pin_name)
+
+        brightness = float(self._config.get("brightness", 0.3))
+        auto_write = bool(self._config.get("auto_write", False))
+
+        self._pixels = neopixel.NeoPixel(pin, self._width * self._height, auto_write=auto_write, brightness=brightness)
         self.clear()
         self.show()
 
@@ -45,7 +56,7 @@ class MatrixBoard:
             self.clear()
             self.render_text(-i, 0, new_text, color)
             self.show()
-            time.sleep(0.1)
+            time.sleep(self._scroll_delay)
 
     def render_text(self, x, row, text, color):
         print(f"Printing line {row}")

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Matrix Config
+{% endblock title %}
+
+{% block content %}
+<h1 class="mb-3">Matrix Configuration</h1>
+<p class="text-muted">
+  Pas hier de instellingen aan die in <code>config/config.json</code> worden opgeslagen.
+</p>
+
+<div class="row">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <form method="post" action="/config/save">
+
+          <div class="mb-3">
+            <label for="pin" class="form-label">GPIO pin</label>
+            <input
+              type="text"
+              class="form-control"
+              id="pin"
+              name="pin"
+              value="{{ cfg.pin }}"
+              placeholder="D18"
+            >
+            <div class="form-text">
+              Naam van de pin uit het <code>board</code> module, bijv. D18.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="brightness" class="form-label">Brightness</label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              max="1"
+              class="form-control"
+              id="brightness"
+              name="brightness"
+              value="{{ cfg.brightness }}"
+            >
+            <div class="form-text">
+              Waarde tussen 0 en 1.
+            </div>
+          </div>
+
+          <div class="form-check mb-3">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="auto_write"
+              name="auto_write"
+              {% if cfg.auto_write %}checked{% endif %}
+            >
+            <label class="form-check-label" for="auto_write">
+              NeoPixel auto_write inschakelen
+            </label>
+          </div>
+
+          <div class="mb-3">
+            <label for="scroll_delay" class="form-label">Scroll delay (seconds)</label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              class="form-control"
+              id="scroll_delay"
+              name="scroll_delay"
+              value="{{ cfg.scroll_delay }}"
+            >
+            <div class="form-text">
+              Vertraging tussen scroll frames (bijv. 0.05 tot 0.2).
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="font_baseline_offset" class="form-label">Font baseline offset</label>
+            <input
+              type="number"
+              class="form-control"
+              id="font_baseline_offset"
+              name="font_baseline_offset"
+              value="{{ cfg.font_baseline_offset }}"
+            >
+            <div class="form-text">
+              Verticale offset van de tekst in pixels (was eerder hardcoded als +3).
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            Save configuration
+          </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
