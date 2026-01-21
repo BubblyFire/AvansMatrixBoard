@@ -3,5 +3,6 @@
   "brightness": 0.3,
   "auto_write": false,
   "scroll_delay": 0.1,
-  "font_baseline_offset": 3
+  "font_baseline_offset": 3,
+  "gif_delay": 1.0
 }

@@ -91,6 +91,21 @@ Matrix Config
             </div>
           </div>
 
+          <div class="mb-3">
+            <label for="gif_delay" class="form-label">GIF speed multiplier</label>
+            <input
+              type="number"
+              step="0.1"
+              min="0.1"
+              class="form-control"
+              name="gif_delay"
+              value="{{ cfg.gif_delay }}"
+            />
+            <small class="text-muted">
+              1.0 = normal, lower is faster, higher is slower
+            </small>
+          </div>
+
           <button type="submit" class="btn btn-primary">
             Save configuration
           </button>

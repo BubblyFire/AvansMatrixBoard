@@ -1,6 +1,7 @@
 from flask import render_template, request
 from app.extensions import matrixpi
 from ..blueprint import core_bp 
+from ..utils.utils import clear_matrix
 
 @core_bp.route("/draw")
 def draw_route():
@@ -11,7 +12,7 @@ def callback_route():
     data = request.get_json()
     data = data["value"]
 
-    matrixpi.matrixboard.clear()
+    clear_matrix()
     for i in range(len(data)):
         y = i // 30
         x = i % 30

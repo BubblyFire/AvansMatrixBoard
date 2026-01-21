@@ -19,6 +19,7 @@ def config_save():
     auto_write = request.form.get("auto_write")
     scroll_delay = request.form.get("scroll_delay", cfg.get("scroll_delay"))
     font_offset = request.form.get("font_baseline_offset", cfg.get("font_baseline_offset"))
+    gif_delay = request.form.get("gif_delay", cfg.get("gif_delay", 1.0))
 
     cfg["pin"] = pin.strip() if pin else "D18"
 
@@ -38,6 +39,11 @@ def config_save():
         cfg["font_baseline_offset"] = int(font_offset)
     except (TypeError, ValueError):
         flash("Font offset must be an integer.", "danger")
+
+    try:
+        cfg["gif_delay"] = max(0.1, float(gif_delay))
+    except (TypeError, ValueError):
+        flash("GIF delay must be a positive number.", "danger")
 
     save_matrix_config(cfg)
 

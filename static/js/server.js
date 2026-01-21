@@ -1,284 +1,145 @@
-const PI_LIST_URL    = "/pi/files";
-const PI_PREVIEW_URL = "/pi/file/preview";
-const PI_DISPLAY_URL = "/pi/file/display";
-const PI_UPLOAD_URL  = "/pi/file/upload";
+import { URLS, postJSON } from "./api.js";
+import { bindGlobalMenuClose } from "./menu.js";
+import { joinPath, parentPath } from "./functions.js";
+import { makeTitle, makeMuted, makeRow } from "./ui.js";
+import { UI } from "./ui.js"
 
-const PI_MKDIR_URL   = "/pi/dir/mkdir";
-
-let piPath     = "";
-let piSelected = null;
-
-let localFileInput = null;
+let state = {
+  path: "",
+  selected: null, 
+};
 
 window.addEventListener("load", init);
 
 function init() {
-  // start at root
-  loadPiDir("");
-
-  const createFolderBtn = document.getElementById("createFolderBtn");
-  const usePiFileBtn    = document.getElementById("usePiFileBtn");
-  const uploadLocalBtn  = document.getElementById("uploadLocalBtn");
-  localFileInput        = document.getElementById("localFileInput");
-
-
-  if (createFolderBtn) {
-    createFolderBtn.addEventListener("click", onCreateFolderClick);
-  }
-
-  if (usePiFileBtn) {
-    usePiFileBtn.addEventListener("click", onUsePiFileClick);
-  }
-
-  if (uploadLocalBtn) {
-    uploadLocalBtn.addEventListener("click", uploadFile);
-  }
+  bindUI();
+  bindGlobalMenuClose();
+  loadDir("");
 }
 
-// ------------------- Load directory -------------------------------
-async function loadPiDir(path) {
-  try {
-    const response = await fetch(PI_LIST_URL, {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ path })
-    });
+function bindUI() {
+  UI.btnMkdir()?.addEventListener("click", onCreateFolderClick);
+  UI.btnUse()?.addEventListener("click", onUseSelectedFileClick);
+  UI.btnUpload()?.addEventListener("click", onUploadClick);
+}
 
-    const data = await response.json();
-    if (!response.ok) {
-      console.error("pi/files error", data);
-      alert("Kon map niet laden.");
-      return;
+function setSelected(itemOrNull) {
+  state.selected = itemOrNull;
+
+  const selectedEl = UI.selectedEl();
+  if (selectedEl) selectedEl.textContent = itemOrNull ? ("/" + itemOrNull.path) : "–";
+
+  // Preview only for files
+  const wrap = UI.previewWrap();
+  const img  = UI.previewImg();
+  if (wrap && img) {
+    if (itemOrNull && itemOrNull.kind === "file") {
+      img.src = `${URLS.preview}?path=${encodeURIComponent(itemOrNull.path)}`;
+      wrap.style.display = "block";
+    } else {
+      img.src = "";
+      wrap.style.display = "none";
     }
-
-    piPath = data.path || "";
-    renderPiBrowser(data);
-  } catch (err) {
-    console.error("loadPiDir exception:", err);
-    alert("Er ging iets mis bij het laden van de map.");
   }
 }
 
-// ------------------- Render directory -----------------------------
-function renderPiBrowser(data) {
-  const piBrowser        = document.getElementById("piBrowser");
-  const piBreadcrumb     = document.getElementById("piBreadcrumb");
-  const piPreview        = document.getElementById("piPreview");
-  const piPreviewImg     = document.getElementById("piPreviewImg");
-  const piSelectedFileEl = document.getElementById("piSelectedFile");
+function setBreadcrumb(path) {
+  const el = UI.breadcrumb();
+  if (el) el.textContent = "/" + (path || "");
+}
 
-  if (!piBrowser) return;
+async function loadDir(path) {
+  try {
+    const data = await postJSON(URLS.list, { path });
+    state.path = data.path || "";
+    setBreadcrumb(state.path);
+    setSelected(null);
+    renderBrowser(data.dirs || [], data.files || []);
+  } catch (e) {
+    console.error(e);
+    alert("Kon map niet laden.");
+  }
+}
+function renderBrowser(dirs, files) {
+  const browser = UI.browser();
+  if (!browser) return;
 
-  piBrowser.innerHTML = "";
+  browser.innerHTML = "";
 
-  // Breadcrumb
-  piBreadcrumb.textContent = "/" + (piPath || "");
-
-  // "Go up" entry
-  if (piPath !== "") {
-    const back = document.createElement("div");
-    back.textContent = "⬅ .. (terug)";
-    back.className = "text-primary mb-2";
-    back.style.cursor = "pointer";
-    back.onclick = () => {
-      const parent = piPath.split("/").slice(0, -1).join("/");
-      loadPiDir(parent);
-    };
-    piBrowser.appendChild(back);
+  // Up
+  if (state.path) {
+    const up = document.createElement("div");
+    up.textContent = "⬅ .. (terug)";
+    up.className = "text-primary mb-2";
+    up.style.cursor = "pointer";
+    up.onclick = () => loadDir(parentPath(state.path));
+    browser.appendChild(up);
   }
 
-  const dirs  = data.dirs  || [];
-  const files = data.files || [];
-
-  // ---- Directories ------------------------------------------------
-  dirs.forEach((name) => {
-    const fullPath = (piPath ? piPath + "/" : "") + name;
-
-    const row = document.createElement("div");
-    row.className =
-      "d-flex align-items-center justify-content-between p-1 rounded mb-1";
-    row.style.cursor = "pointer";
-
-    const nameSpan = document.createElement("span");
-    nameSpan.textContent = "📁 " + name;
-    nameSpan.className = "small";
-    nameSpan.onclick = () => loadPiDir(fullPath);
-
-    row.appendChild(nameSpan);
-    piBrowser.appendChild(row);
-  });
-
-  // ---- Files ------------------------------------------------------
-  files.forEach((name) => {
-    const fullPath = (piPath ? piPath + "/" : "") + name;
-
-    const row = document.createElement("div");
-    row.className ="d-flex align-items-center justify-content-between p-1 rounded mb-1";
-    row.style.cursor = "pointer";
-
-    const nameSpan = document.createElement("span");
-    nameSpan.textContent = name;
-    nameSpan.className = "small text-truncate";
-    nameSpan.onclick = () => {
-      piSelected = fullPath;
-      if (piSelectedFileEl) {
-        piSelectedFileEl.textContent = "/" + fullPath;
-      }
-      if (piPreviewImg && piPreview) {
-        piPreviewImg.src = PI_PREVIEW_URL + `?path=${encodeURIComponent(fullPath)}`;
-        piPreview.style.display = "block";
-      }
-    };
-
-    row.appendChild(nameSpan);
-    piBrowser.appendChild(row);
-  });
-
+  // Empty
   if (dirs.length === 0 && files.length === 0) {
     const empty = document.createElement("div");
     empty.textContent = "Deze map is leeg.";
-    empty.className = "text-muted small";
-    piBrowser.appendChild(empty);
+    empty.className = "text-muted small mt-2";
+    browser.appendChild(empty);
+    return;
+  }
+
+  // Folders
+  browser.appendChild(makeTitle("📁 Mappen"));
+  if (dirs.length === 0) {
+    browser.appendChild(makeMuted("Geen mappen."));
+  } else {
+    dirs.forEach((name) => browser.appendChild(makeRow({
+      kind: "dir",
+      name,
+      path: joinPath(state.path, name),
+      onOpen: () => loadDir(joinPath(state.path, name)),
+    })));
+  }
+
+  // Files
+  browser.appendChild(makeTitle("🖼️ Bestanden"));
+  if (files.length === 0) {
+    browser.appendChild(makeMuted("Geen bestanden."));
+  } else {
+    files.forEach((name) => browser.appendChild(makeRow({
+      kind: "file",
+      name,
+      path: joinPath(state.path, name),
+      onOpen: () => setSelected({ kind: "file", name, path: joinPath(state.path, name) }),
+    })));
   }
 }
 
-
-// --------------- Create folder ------------------------------------
 async function onCreateFolderClick() {
   const name = prompt("Naam van de nieuwe map:");
   if (!name) return;
-
-  try {
-    const response = await fetch(PI_MKDIR_URL, {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ path: piPath, name })
-    });
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("mkdir error:", data);
-      alert("Kon map niet maken: " + (data.error || response.status));
-      return;
-    }
-
-    loadPiDir(piPath);
-  } catch (err) {
-    console.error("mkdir exception:", err);
-    alert("Er ging iets mis bij het maken van de map.");
-  }
+  await postJSON(URLS.mkdir, { path: state.path, name });
+  loadDir(state.path);
 }
 
-// --------------- Use selected file -------------------------------
-async function onUsePiFileClick() {
-  if (!piSelected) {
+async function onUseSelectedFileClick() {
+  if (!state.selected || state.selected.kind !== "file") {
     alert("Geen bestand geselecteerd.");
     return;
   }
-
-  try {
-    const response = await fetch(PI_DISPLAY_URL, {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ path: piSelected })
-    });
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("use error:", data);
-      alert("Kon bestand niet gebruiken: " + (data.error || response.status));
-      return;
-    }
-
-    alert("Bestand is naar de matrix gestuurd!");
-  } catch (err) {
-    console.error("use exception:", err);
-    alert("Er ging iets mis bij het gebruiken van het bestand.");
-  }
+  await postJSON(URLS.display, { path: state.selected.path });
+  alert("Bestand is naar de matrix gestuurd!");
 }
 
-// --------------- Rename / Move --------------------
-async function renameOrMoveItem(currentRelPath, typeLabel) {
-  const suggestion = currentRelPath;
-  const newRelPath = prompt(
-    "Nieuwe naam/locatie voor " + typeLabel + ":\n" +
-    "(voorbeeld: images/nieuwenaam.png of andere_map/bestand.png)",
-    suggestion
-  );
-
-  if (!newRelPath || newRelPath === currentRelPath) return;
-
-  try {
-    const response = await fetch(PI_MOVE_URL, {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        from_path: currentRelPath,
-        to_path: newRelPath
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("move error:", data);
-      alert("Kon " + typeLabel + " niet verplaatsen/hernoemen: " + (data.error || response.status));
-      return;
-    }
-
-    loadPiDir(piPath);
-  } catch (err) {
-    console.error("move exception:", err);
-    alert("Er ging iets mis bij het verplaatsen/hernoemen.");
-  }
-}
-
-async function uploadFile() {
-  if (!localFileInput) {
-    alert("Local file input niet gevonden.");
-    return;
-  }
-
-  const file = localFileInput.files?.[0];
-  if (!file) {
-    alert("Geen lokaal bestand geselecteerd.");
-    return;
-  }
+async function onUploadClick() {
+  const file = UI.fileInput()?.files?.[0];
+  if (!file) return alert("Geen lokaal bestand geselecteerd.");
 
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("path", piPath || "");
+  formData.append("path", state.path || "");
 
-  try {
-    const response = await fetch("/pi/file/upload", {
-      method: "POST",
-      body: formData
-    });
+  const res = await fetch(URLS.upload, { method: "POST", body: formData });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.ok) throw new Error(data.error || `HTTP ${res.status}`);
 
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok || !data.ok) {
-      console.error("upload error:", data);
-      alert("Kon lokaal bestand niet uploaden: " + (data.error || response.status));
-      return;
-    }
-
-    alert("Lokaal bestand is geüpload naar de Pi.");
-    loadPiDir(piPath || "");
-  } catch (err) {
-    console.error("upload exception:", err);
-    alert("Er ging iets mis bij het uploaden van het lokale bestand.");
-  }
+  alert("Upload klaar!");
+  loadDir(state.path);
 }
