@@ -10,8 +10,7 @@ class APIResponse(SerializableClass):
         self.data = data
 
     def to_dict(self):
-        response_dict = dict()
-        response_dict["status"] = self.status
+        response_dict = {"status": self.status}
 
         if self.message:
             response_dict["message"] = self.message
@@ -34,32 +33,8 @@ class ErrorResponse(APIResponse):
         super().__init__(status="error", message=message)
 
 
-def success_response(
-    data=None,
-    status: int = 200,
-    message: str = None,
-    headers: dict = None,
-    cookies: dict = None,
-):
-    """
-    Generate a success response with the provided data, status code, message, headers, and cookies.
-
-    Parameters:
-        data (Any, optional): The data to be included in the response. Defaults to None.
-        status (int, optional): The status code of the response. Defaults to 200.
-        message (str, optional): The message to be included in the response. Defaults to None.
-        headers (dict, optional): The headers to be included in the response. Defaults to None.
-        cookies (dict, optional): The cookies to be included in the response. Defaults to None.
-
-    Returns:
-        tuple: A tuple containing the response object and the status code.
-            - response (Response): The success response object.
-            - status (int): The status code of the response.
-    """
-    response_data = SuccessResponse(data=data, message=message)
-    serialized_data = response_data.to_json()
-    response = Response(serialized_data, mimetype="application/json")
-
+def _apply_headers_and_cookies(response: Response, headers: dict, cookies: dict) -> None:
+    """Attach optional headers and cookies to a response object."""
     if headers:
         response.headers.update(headers)
 
@@ -67,6 +42,18 @@ def success_response(
         for key, value in cookies.items():
             response.set_cookie(key, value)
 
+
+def success_response(
+    data=None,
+    status: int = 200,
+    message: str = None,
+    headers: dict = None,
+    cookies: dict = None,
+):
+    """Build a JSON success response. Returns a (response, status) tuple."""
+    response_data = SuccessResponse(data=data, message=message)
+    response = Response(response_data.to_json(), mimetype="application/json")
+    _apply_headers_and_cookies(response, headers, cookies)
     return response, status
 
 
@@ -76,29 +63,8 @@ def error_response(
     headers: dict = None,
     cookies: dict = None,
 ):
-    """
-    Generate an error response with the given message, status code, headers, and cookies.
-
-    Parameters:
-        message (str): The error message to be included in the response. Defaults to "Internal Server Error".
-        status (int): The status code to be included in the response. Defaults to 500.
-        headers (dict): A dictionary of additional headers to be included in the response. Defaults to None.
-        cookies (dict): A dictionary of cookies to be included in the response. Defaults to None.
-
-    Returns:
-        tuple: A tuple containing the response object and the status code.
-            - response (Response): The error response object.
-            - status (int): The status code of the response.
-    """
+    """Build a JSON error response. Returns a (response, status) tuple."""
     response_data = ErrorResponse(message=message)
-    serialized_data = response_data.to_json()
-    response = Response(serialized_data, mimetype="application/json")
-
-    if headers:
-        response.headers.update(headers)
-
-    if cookies:
-        for key, value in cookies.items():
-            response.set_cookie(key, value)
-
+    response = Response(response_data.to_json(), mimetype="application/json")
+    _apply_headers_and_cookies(response, headers, cookies)
     return response, status

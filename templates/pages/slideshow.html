@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="/css/imagepicker.css" />
+  <script src="/js/slideshow.js" defer></script>
+{% endblock %}
+
+{% block title %}Slideshow{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>Slideshow</h1>
+  <p>Play images from a folder or build a custom playlist.</p>
+</div>
+
+<div class="ip-layout">
+
+  <!-- Left: file browser -->
+  <div class="card">
+    <div class="card-body">
+      <p class="section-label mb-2">Browse files</p>
+      <!-- Breadcrumb -->
+      <div id="breadcrumb" class="mb-1" style="font-size:0.8rem;color:var(--text-muted);min-height:1.4em;"></div>
+      <div id="fileBrowser" class="ip-sidebar">
+        <div class="ip-empty">Loading…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: controls -->
+  <div class="card ip-preview-card">
+    <div class="card-body d-flex flex-column" style="gap:1rem;">
+
+      <!-- Mode tabs -->
+      <div class="btn-group btn-group-sm w-100" role="group">
+        <button id="tabFolder"   class="btn btn-secondary active" onclick="switchTab('folder')">📁 Folder</button>
+        <button id="tabPlaylist" class="btn btn-outline-secondary" onclick="switchTab('playlist')">🎞 Playlist</button>
+      </div>
+
+      <!-- Folder panel -->
+      <div id="panelFolder">
+        <p class="section-label mb-1">Selected folder</p>
+        <div id="selectedFolderDisplay" class="ip-no-selection">
+          Click a folder in the browser.
+        </div>
+      </div>
+
+      <!-- Playlist panel -->
+      <div id="panelPlaylist" style="display:none;">
+        <div class="d-flex align-items-center justify-content-between mb-1">
+          <p class="section-label mb-0">Playlist <span id="playlistCount" class="badge badge-secondary ml-1">0</span></p>
+          <button class="btn btn-sm btn-outline-danger" onclick="clearPlaylist()">Clear</button>
+        </div>
+        <div id="playlistItems" class="ip-sidebar" style="max-height:200px;">
+          <div class="ip-empty">Click image files in the browser to add them.</div>
+        </div>
+      </div>
+
+      <!-- Interval -->
+      <div>
+        <p class="section-label mb-1">Interval: <strong><span id="intervalDisplay">5</span>s</strong></p>
+        <input type="range" id="intervalSlider" min="1" max="60" value="5" class="form-control-range">
+        <div class="d-flex justify-content-between" style="font-size:0.75rem;color:var(--text-muted);">
+          <span>1s</span><span>60s</span>
+        </div>
+      </div>
+
+      <!-- Start / Stop -->
+      <div class="d-flex" style="gap:0.5rem;">
+        <button id="startBtn" class="btn btn-primary flex-grow-1" disabled>▶ Start</button>
+        <button id="stopBtn"  class="btn btn-danger  flex-grow-1" disabled>■ Stop</button>
+      </div>
+
+      <!-- Status -->
+      <div id="statusCard" class="rounded p-2" style="background:var(--surface-muted);display:none;">
+        <div class="d-flex align-items-center mb-1" style="gap:0.5rem;">
+          <span id="statusDot" class="badge badge-secondary">● Stopped</span>
+          <span id="statusFolder" class="small text-muted"></span>
+        </div>
+        <div id="statusFile" class="small" style="word-break:break-all;"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.addEventListener('load', () => initSlideshow());
+</script>
+{% endblock %}

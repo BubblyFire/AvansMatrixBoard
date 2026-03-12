@@ -1,29 +1,200 @@
-* {
-  padding: 0;
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+/* ── Design tokens ──────────────────────────────────────────────── */
+:root {
+  --accent:        #6366f1;
+  --accent-dark:   #4f46e5;
+  --accent-light:  #e0e7ff;
+  --surface:       #ffffff;
+  --surface-muted: #f8fafc;
+  --border:        #e2e8f0;
+  --text:          #0f172a;
+  --text-muted:    #64748b;
+  --danger:        #ef4444;
+  --radius:        12px;
+  --shadow:        0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+  --shadow-sm:     0 1px 2px rgba(0,0,0,.06);
 }
+
+/* ── Base ───────────────────────────────────────────────────────── */
+* { box-sizing: border-box; padding: 0; margin: 0; }
 
 body {
-  padding: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f1f5f9;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
 }
 
-table,
-tr,
-td {
-    border: 1px solid black;
-    cursor: pointer;
+/* ── Navbar ─────────────────────────────────────────────────────── */
+.navbar {
+  background: #0f172a !important;
+  border-bottom: 1px solid #1e293b;
+  padding: 0.6rem 0;
+}
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.3px;
+  color: #fff !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.navbar .nav-link {
+  color: #94a3b8 !important;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.75rem !important;
+  border-radius: 6px;
+  transition: color .15s, background .15s;
+}
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: #fff !important;
+  background: #1e293b;
 }
 
+/* ── Main container ─────────────────────────────────────────────── */
+main.container {
+  padding-top: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+/* ── Page header ────────────────────────────────────────────────── */
+.page-header {
+  margin-bottom: 1.5rem;
+}
+.page-header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: var(--text);
+}
+.page-header p {
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+/* ── Cards ──────────────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow);
+}
+.card-body { padding: 1.25rem; }
+.card-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+/* ── Feature cards (home page) ──────────────────────────────────── */
+.feature-card {
+  display: block;
+  text-decoration: none !important;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  transition: box-shadow .2s, transform .15s, border-color .2s;
+  color: var(--text) !important;
+}
+.feature-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  text-decoration: none !important;
+}
+.feature-card .feature-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+.feature-card h5 {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.feature-card p {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────── */
+.btn {
+  border-radius: 8px !important;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all .15s;
+}
+.btn-primary {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+.btn-primary:hover {
+  background: var(--accent-dark) !important;
+  border-color: var(--accent-dark) !important;
+}
+.btn-primary.active {
+  background: var(--accent-dark) !important;
+  border-color: var(--accent-dark) !important;
+}
+.btn-outline-primary {
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+.btn-outline-primary:hover {
+  background: var(--accent) !important;
+  color: #fff !important;
+}
+
+/* ── Forms ──────────────────────────────────────────────────────── */
+.form-control {
+  border-radius: 8px !important;
+  border-color: var(--border) !important;
+  font-size: 0.9rem;
+  transition: border-color .15s, box-shadow .15s;
+}
+.form-control:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(99,102,241,.15) !important;
+}
+.form-text, .text-muted { color: var(--text-muted) !important; }
+
+/* ── Section label ──────────────────────────────────────────────── */
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+/* ── Canvas / draw grid ─────────────────────────────────────────── */
+table, tr, td {
+  border: 1px solid #444;
+  cursor: pointer;
+}
 table {
-    border-collapse: collapse;
-    background-color: white;
+  border-collapse: collapse;
+  background: #000;
+}
+.gridContainer {
+  width: 100%;
+  touch-action: none;
 }
 
-tr {
-    height: 20px;
+/* ── Badge tweaks ───────────────────────────────────────────────── */
+.badge-info {
+  background: var(--accent-light) !important;
+  color: var(--accent-dark) !important;
+  border-radius: 6px;
 }
 
-td {
-    width: 20px;
+/* ── Alerts ─────────────────────────────────────────────────────── */
+.alert {
+  border-radius: var(--radius) !important;
+  border: none;
 }

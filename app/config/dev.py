@@ -1,3 +1,7 @@
+"""
+app/config/dev.py — Flask configuration for local development.
+"""
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv

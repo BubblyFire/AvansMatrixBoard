@@ -1,160 +1,109 @@
 # Frontend Structure
 
-## Purpose
+## Overview
 
-The frontend provides a user interface for controlling the
-AvansMatrixBoard. It allows users to:
+The frontend is built with Flask/Jinja2 templates, Bootstrap 4, jQuery, and vanilla JavaScript. All pages extend `base.html` which provides the navbar, flash messages, toast notifications, and shared scripts.
 
-- Display text on specific lines
-- Upload images
-- Pick predefined images
-- Draw directly on a pixel grid
-- Navigate between control modes
+## Templates (`templates/`)
 
-It is built using Flask templates (Jinja2) combined with JavaScript and
-jQuery for real-time interaction.
+| Template | Route | Description |
+|----------|-------|-------------|
+| `base.html` | — | Shared layout, navbar, language switcher, toast system |
+| `pages/home.html` | `/` | Welcome screen |
+| `pages/text.html` | `/text` | Send up to 3 lines of colored text to the matrix |
+| `pages/draw.html` | `/draw` | Paint pixels on a 30×30 grid |
+| `pages/image.html` | `/image` | Upload an image or browse the Pi file system |
+| `pages/imagepicker.html` | `/imagepicker` | Browse predefined image assets |
+| `pages/config.html` | `/config` | Adjust hardware settings |
 
----
+## JavaScript Files (`static/js/`)
 
-## Location
+| File | Used on | Purpose |
+|------|---------|---------|
+| `main.js` | Draw page | Grid rendering, mouse/touch drawing, pixel sending, save to PNG |
+| `server.js` | Image page | Pi file browser, upload, display file on matrix |
+| `imagepicker.js` | Image picker page | Folder tree, image selection |
+| `api.js` | Image page | Shared `postJSON()` fetch wrapper and URL constants |
+| `ui.js` | Image page | DOM element accessors and UI builders |
+| `menu.js` | Image page | Context menu behaviour |
+| `actions.js` | Image page | File actions (rename, delete, move) |
+| `functions.js` | Image page | Path utilities (`joinPath`, `parentPath`) |
 
-Frontend files are organised as follows:
+## Pages
 
-- `templates/` → HTML templates rendered by Flask
-- `static/` → CSS, JavaScript, and external libraries
+### Text Page (`text.html`)
 
-Main templates:
+Sends text to the matrix on one of three lines. Each line has a color picker, text input, and send button. Uses jQuery AJAX to `POST /text2`. Shows a success or error toast on completion.
 
-- `base.html` - Shared layout and navigation
-- `home.html` - Home screen
-- `text.html` - Text input control
-- `draw.html` - Pixel drawing interface
-- `image.html` - Image upload page
-- `imagepicker.html` - Image selector interface
+### Draw Page (`draw.html`)
 
----
+Provides an interactive 30×30 pixel grid. Features:
+- **Mouse and touch support** — works on desktop and mobile
+- **Dynamic cell sizing** — grid scales to fit the screen width
+- **Draw / Erase / Clear** modes
+- **Save image** — downloads the current drawing as a PNG (30×30 pixels)
 
-## Core Layout – base.html
+Sends all pixel data as a flat array of CSS `rgb()` strings to `POST /sendtoboard`.
 
-All pages extend `base.html`, which defines:
+### Image Upload Page (`image.html`)
 
-- Page structure
-- Navigation bar
-- Shared scripts & styles
-- Flash message display
+Two sections:
 
-Navigation links include:
+**Local File Picker** — Select an image from your computer and upload it to the Pi. Supports jpg, jpeg, png, gif, bmp. Shows a preview before uploading.
 
-- Home
-- Text
-- Draw
-- Image
-- Pick an Image
+**Raspberry Pi File Browser** — Browse files already stored on the Pi at `/home/avans/user_uploads`. Supports:
+- Navigate folders
+- Create folders
+- Upload files to the current folder
+- Preview images
+- Display a selected file on the matrix
+- Rename, move, and delete files/folders (via context menu)
 
-This ensures consistent layout across all pages.
+### Image Picker Page (`imagepicker.html`)
 
----
+Browses predefined image assets stored in `static/assets/`. Folders are loaded lazily on first open. Clicking an image sends it to the matrix via `POST /imagelist_show`.
 
-## Individual Pages
+### Config Page (`config.html`)
 
-### Home Page
+Form that saves to `app/config/config.json`. Settings:
 
-Template: `home.html`
-Displays a simple welcome screen.
+| Setting | Description |
+|---------|-------------|
+| GPIO pin | NeoPixel data pin (default: D18) |
+| Brightness | 0.0 – 1.0 |
+| auto_write | If true, LEDs update immediately on each pixel set (slower) |
+| Scroll delay | Seconds between scroll frames |
+| Font baseline offset | Vertical pixel offset for text rendering |
+| GIF speed multiplier | 1.0 = normal speed; lower = faster |
 
-### Text Control Page
+## Language Switcher
 
-Template: `text.html`
+The navbar includes an EN/NL toggle that calls `GET /set-language/<lang>`. The chosen language is stored in the Flask session. All UI strings come from `app/i18n.py`.
 
-Allows sending text to 3 separate display lines. Each line has:
+## Toast Notifications
 
-- A color picker
-- A text box
-- A send button
+A global `showToast(message, type)` function is available on every page (defined in `base.html`). It shows a Bootstrap toast in the top-right corner.
 
-AJAX POST requests are sent to: /text2
-
-Payload example:
-
-```json
-{ 
-   "text": "Hello", 
-   "color": "#ff0000", 
-   "line": 0 
-}
+```javascript
+showToast('File sent to matrix.');             // green
+showToast('Failed to connect.', 'error');      // red
 ```
-
-### Draw Page
-
-Template: `draw.html`
-
-Provides an interactive grid for pixel drawing:
-
-- Color picker
-- Draw /Erase toggle
-- Clear button
-- Pixel canvas table
-
-### Image Upload Page
-
-Template: `image.html`
-
-Allows users to upload images using a standard HTML form.
-
-### Image Picker Page
-
-Template: `imagepicker.html`
-
-Provides a visual interface for selecting predefined images using dynamic loading and JavaScript.
-
----
 
 ## Communication With Backend
 
-The frontend communicates using AJAX and form submissions.
-
-| Purpose       | Endpoint | Method |
-|---------------|----------|--------|
-| Send text     | /text2   | POST   |
-| Upload image  | /image   | POST   |
-| Draw pixels   | Dynamic  | POST   |
-
----
-
-## Typical User Flow
-
-1. User navigates using the menu
-2. Selects function (Text, Draw, Image)
-3. Enters data
-4. Sends request
-5. Backend processes the input
-6. LED Matrix updates
-
----
-
-## Technologies Used
-
-- HTML5
-- CSS3
-- JavaScript
-- jQuery
-- Flask (Jinja2 templates)
-- Bootstrap 4.5.2
-
----
-
-## Frontend Architecture Summary
-
-``` python
-User Interface (Browser)
-   ↓
-Jinja2 Templates
-   ↓
-JavaScript / jQuery
-   ↓
-HTTP/ AJAX Requests
-   ↓
-Flask Backend
-   ↓
-LED Matrix Output
-```
+| Page | Endpoint | Method | Purpose |
+|------|----------|--------|---------|
+| Text | `/text2` | POST | Send a line of text to the matrix |
+| Draw | `/sendtoboard` | POST | Send full pixel grid to the matrix |
+| Image | `/image` | POST | Upload an image file |
+| Image | `/uploads/<name>` | GET | Display uploaded image on matrix |
+| Image | `/pi/files` | POST | List Pi directory contents |
+| Image | `/pi/file/display` | POST | Display a Pi file on the matrix |
+| Image | `/pi/file/upload` | POST | Upload a file to the Pi |
+| Image | `/pi/file/preview` | GET | Preview a Pi file in the browser |
+| Image | `/pi/dir/mkdir` | POST | Create a folder on the Pi |
+| Image | `/pi/path/delete` | POST | Delete a file or folder |
+| Image | `/pi/path/rename` | POST | Rename a file or folder |
+| Image | `/pi/path/move` | POST | Move a file or folder |
+| Image picker | `/imagelist` | POST | Get image directory listing |
+| Image picker | `/imagelist_show` | POST | Display a predefined image |

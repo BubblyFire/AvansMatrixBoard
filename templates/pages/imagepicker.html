@@ -6,27 +6,54 @@
   <script src="/js/imagepicker.js" defer></script>
 {% endblock head %}
 
-{% block title %}
-Image Picker
-{% endblock title %}
+{% block title %}Image Picker{% endblock title %}
 
 {% block content %}
 
-<h1 class="mb-3">Pick an image</h1>
-<p class="text-muted">Browse the folders and select an image to display on the LED matrix.</p>
+<div class="page-header">
+  <h1>{{ t('imagepicker.title') }}</h1>
+  <p>{{ t('imagepicker.subtitle') }}</p>
+</div>
 
-<div class="card">
-  <div class="card-body">
-    <h6 class="text-muted mb-2">Folders</h6>
-    <div id="dirs" class="ip-sidebar">
+<div class="ip-layout">
+
+  <div class="card ip-folders-card">
+    <div class="card-body">
+      <p class="section-label">{{ t('imagepicker.folders') }}</p>
+      <div id="dirs" class="ip-sidebar"></div>
     </div>
   </div>
+
+  <div class="card ip-preview-card">
+    <div class="card-body">
+      <p class="section-label">{{ t('imagepicker.preview') }}</p>
+      <div class="ip-preview-container">
+        <div class="ip-no-selection" id="noSelectionMsg">
+          <span>{{ t('imagepicker.no_selection') }}</span>
+        </div>
+        <div id="previewContent" style="display:none;">
+          <img id="previewImg" class="ip-preview-img" src="" alt="" />
+          <p class="ip-preview-name" id="previewName"></p>
+          <button class="btn btn-primary w-100" id="sendBtn" onclick="sendSelected()">
+            {{ t('imagepicker.send_btn') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 {% endblock content %}
 
 {% block scripts %}
 <script>
+  const IP_STRINGS = {
+    empty:    {{ t('imagepicker.empty')    | tojson }},
+    sending:  {{ t('imagepicker.sending')  | tojson }},
+    sent:     {{ t('imagepicker.sent')     | tojson }},
+    send_btn: {{ t('imagepicker.send_btn') | tojson }},
+  };
   window.addEventListener('load', () => init());
 </script>
 {% endblock scripts %}

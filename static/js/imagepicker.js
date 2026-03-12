@@ -1,76 +1,60 @@
+let selectedPath = null;
 
-URL = "imagelist"
-
-/*
-  Fetches directories and images from the server for a given path, then passes the returned data to buildUI() to display it.
-*/
-function getImages(path, parent){
-    console.log(`getImages(${path}, ${parent})`)
-    url = "imagelist"
-    fetch(url, {
+function getImages(path, parent) {
+    fetch("imagelist", {
         method: "post",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({"path": path})
-        })
-        .then( (response) => { 
-            return response.json(); /* promise object! */
-        })
-        .then( (data) => { 
-            buildUI(data, parent);
-        });
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ path })
+    })
+    .then(r => r.json())
+    .then(data => buildUI(data, parent));
 }
 
-/*
-  Sends the selected image path to the backend to display it on the LED matrix.
-*/
-function upload(path){
-    console.log(`upload(${path})`)
-    url = "imagelist_show"
-    fetch(url, {
+function selectImage(src, name) {
+    selectedPath = src;
+
+    document.querySelectorAll(".flexitem.selected").forEach(el => el.classList.remove("selected"));
+
+    document.getElementById("previewImg").src = src;
+    document.getElementById("previewImg").alt = name;
+    document.getElementById("previewName").textContent = name;
+    document.getElementById("noSelectionMsg").style.display = "none";
+    document.getElementById("previewContent").style.display = "block";
+
+    const btn = document.getElementById("sendBtn");
+    btn.disabled = false;
+    btn.textContent = IP_STRINGS.send_btn;
+}
+
+function sendSelected() {
+    if (!selectedPath) return;
+
+    const btn = document.getElementById("sendBtn");
+    btn.disabled = true;
+    btn.textContent = IP_STRINGS.sending;
+
+    fetch("imagelist_show", {
         method: "post",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({"path": path})
-        })
-        .then( () => { 
-            // expection OK
-        })
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ path: selectedPath })
+    })
+    .then(() => {
+        showToast(IP_STRINGS.sent);
+        btn.disabled = false;
+        btn.textContent = IP_STRINGS.send_btn;
+    });
 }
 
-function _$(id){
-    return document.getElementById(id);
-}
-
-/*
-  Builds the folder tree UI:
-  - Creates collapsible folders
-  - Displays images inside folders
-  - Supports nested folder levels
-*/
 function buildUI(data, parent) {
-    console.log("buildUI", data, parent);
-
-    if (parent === _$("dirs")) {
+    if (parent === document.getElementById("dirs")) {
         parent.innerHTML = "";
     }
 
     // Directories
     data.dirs.forEach(dir => {
-        // ep = wrapper row for a folder
         const ep = document.createElement("div");
-
-        // eb = clickable folder button
         const eb = document.createElement("button");
-
-        // ec = collapsible container holding child content
         const ec = document.createElement("div");
-
-        // ef = container for child folders & images
         const ef = document.createElement("div");
 
         ep.classList.add("fullrow");
@@ -78,14 +62,10 @@ function buildUI(data, parent) {
         ec.classList.add("content", "fullrow");
         ef.classList.add("flexcontainer");
 
-        // Folder label with icon and name
-        eb.innerHTML = `<img class="image" src="${dir.ico}" alt="${dir.alt}"><span> ${dir.desc}</span>`;
+        eb.innerHTML = `<img class="image" src="${dir.ico}" alt="${dir.alt}"><span>${dir.desc}</span>`;
 
         eb.addEventListener("click", () => {
-            // Toggle the visual open/closed state
             eb.classList.toggle("active");
-
-            // Only load the folder contents the first time it's opened
             if (eb.classList.contains("active") && ef.childNodes.length === 0) {
                 getImages(dir.src, ef);
             }
@@ -101,31 +81,22 @@ function buildUI(data, parent) {
     data.imgs.forEach(i => {
         const e = document.createElement("div");
         e.classList.add("flexitem");
-
-        // Thumbnail image
-        e.innerHTML = `<img class="fleximage" src="${i.src}" alt="${i.alt}" title="${i.desc}">`;
+        e.innerHTML = `<img class="fleximage" src="${i.src}" alt="${i.alt}"><span class="flexlabel">${i.desc}</span>`;
 
         e.addEventListener("click", () => {
-            // Remove previous selection highlight
-            parent.querySelectorAll(".flexitem.selected").forEach(el => {
-                el.classList.remove("selected");
-            });
             e.classList.add("selected");
-
-            upload(i.src);
+            selectImage(i.src, i.desc);
         });
 
         parent.appendChild(e);
     });
 
-    // No data
+    // Empty state
     if (data.imgs.length === 0 && data.dirs.length === 0 && parent.childNodes.length === 0) {
-        parent.innerHTML = '<div style="display:block;"><span>-- LEEG --</span></div>';
+        parent.innerHTML = `<div class="ip-empty">${IP_STRINGS.empty}</div>`;
     }
 }
 
-function init(){
-    getImages("", _$("dirs"));
+function init() {
+    getImages("", document.getElementById("dirs"));
 }
-
-

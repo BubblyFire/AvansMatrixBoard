@@ -26,7 +26,7 @@ class SerializableClass:
         try:
             json.dumps(obj)
             return True
-        except:
+        except (TypeError, ValueError):
             return False
 
 
@@ -68,7 +68,7 @@ def generate_uuid(length: int = None) -> str:
         'dfc6f4a9'
     """
     if length:
-        return shorten_uuid(uuid.uuid4())
+        return shorten_uuid(uuid.uuid4(), length)
 
     str_uuid = str(uuid.uuid4())
     return str_uuid

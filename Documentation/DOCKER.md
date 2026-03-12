@@ -1,11 +1,15 @@
 # Running with docker
 
-> **WARNING** Currently not working
+```bash
+# First time (builds the image)
+docker compose up --build
 
+# After that
+docker compose up
 ```
-# Build the docker container image
-docker build -t matrixpi-image .
 
-# Run the container
-docker run --rm -p 5000:5000 -e DISABLE_MATRIX=1 -v ${PWD}:/app matrixpi-image
-```
+The app will be available at http://localhost.
+
+File changes (Python, HTML, JS, CSS) are reflected automatically — no rebuild needed. Flask's reloader will restart the server when it detects changes.
+
+> **Note:** `DISABLE_MATRIX=1` is set in the Dockerfile by default, so the app runs without physical LED hardware.

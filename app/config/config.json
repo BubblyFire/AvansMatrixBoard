@@ -1,8 +1,16 @@
 {
-  "pin": "D18",
-  "brightness": 0.3,
-  "auto_write": false,
-  "scroll_delay": 0.1,
-  "font_baseline_offset": 3,
-  "gif_delay": 1.0
+    "pin": "D18",
+    "brightness": 0.3,
+    "auto_write": false,
+    "scroll_delay": 0.1,
+    "font_baseline_offset": 3,
+    "gif_delay": 1.0,
+    "contrast": 1.2,
+    "saturation": 1.2,
+    "gamma": 0.71,
+    "posterize_bits": 5,
+    "black_level": 6,
+    "black_threshold": 28,
+    "auto_crop": true,
+    "portal_redirect": "http://192.168.50.5/"
 }

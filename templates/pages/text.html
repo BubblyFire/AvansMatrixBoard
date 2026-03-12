@@ -1,62 +1,33 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Text
-{% endblock title %}
+{% block title %}Text{% endblock title %}
 
 {% block content %}
 
-<h1 class="mb-3">Send Text to Matrix</h1>
-<p class="text-muted">Control up to three lines of text with custom colors.</p>
+<div class="page-header">
+  <h1>{{ t('text.title') }}</h1>
+  <p>{{ t('text.subtitle') }}</p>
+</div>
 
 <form onsubmit="return false;">
-  <!-- Line 1 -->
-  <div class="form-row align-items-center mb-3">
-    <div class="col-12 col-md-2 mb-2 mb-md-0">
-      <label for="colorPicker" class="small mb-1">Line 1 color</label>
-      <input type="color" id="colorPicker" value="#ff0000" title="Set PAINT color" class="form-control p-0">
-    </div>
-    <div class="col-12 col-md-7 mb-2 mb-md-0">
-      <label for="textBox" class="small mb-1">Line 1 text</label>
-      <input name="text" id="textBox" class="form-control" placeholder="Enter text for line 1">
-    </div>
-    <div class="col-12 col-md-3">
-      <label class="small d-none d-md-block">&nbsp;</label>
-      <button type="button" id="sendButton" class="btn btn-primary btn-block">Send line 1</button>
-    </div>
-  </div>
-
-  <!-- Line 2 -->
-  <div class="form-row align-items-center mb-3">
-    <div class="col-12 col-md-2 mb-2 mb-md-0">
-      <label for="colorPicker2" class="small mb-1">Line 2 color</label>
-      <input type="color" id="colorPicker2" value="#ff0000" title="Set PAINT color" class="form-control p-0">
-    </div>
-    <div class="col-12 col-md-7 mb-2 mb-md-0">
-      <label for="textBox2" class="small mb-1">Line 2 text</label>
-      <input name="text" id="textBox2" class="form-control" placeholder="Enter text for line 2">
-    </div>
-    <div class="col-12 col-md-3">
-      <label class="small d-none d-md-block">&nbsp;</label>
-      <button type="button" id="sendButton2" class="btn btn-primary btn-block">Send line 2</button>
+  {% for n in [1, 2, 3] %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <p class="section-label">{{ t('text.line_text', n=n) }}</p>
+      <div class="d-flex align-items-center" style="gap:10px;">
+        <input type="color" id="colorPicker{{ n if n > 1 else '' }}" value="#ff0000"
+               title="{{ t('text.line_color', n=n) }}"
+               style="width:44px;height:44px;padding:2px;border:none;border-radius:8px;cursor:pointer;flex-shrink:0;">
+        <input name="text" id="textBox{{ n if n > 1 else '' }}" class="form-control"
+               placeholder="{{ t('text.placeholder', n=n) }}" style="flex:1;">
+        <button type="button" id="sendButton{{ n if n > 1 else '' }}"
+                class="btn btn-primary" style="white-space:nowrap;height:44px;flex-shrink:0;">
+          {{ t('text.send_btn', n=n) }}
+        </button>
+      </div>
     </div>
   </div>
-
-  <!-- Line 3 -->
-  <div class="form-row align-items-center mb-3">
-    <div class="col-12 col-md-2 mb-2 mb-md-0">
-      <label for="colorPicker3" class="small mb-1">Line 3 color</label>
-      <input type="color" id="colorPicker3" value="#ff0000" title="Set PAINT color" class="form-control p-0">
-    </div>
-    <div class="col-12 col-md-7 mb-2 mb-md-0">
-      <label for="textBox3" class="small mb-1">Line 3 text</label>
-      <input name="text" id="textBox3" class="form-control" placeholder="Enter text for line 3">
-    </div>
-    <div class="col-12 col-md-3">
-      <label class="small d-none d-md-block">&nbsp;</label>
-      <button type="button" id="sendButton3" class="btn btn-primary btn-block">Send line 3</button>
-    </div>
-  </div>
+  {% endfor %}
 </form>
 
 {% endblock content %}
@@ -72,16 +43,12 @@ Text
       type: 'POST',
       contentType: 'application/json',
       data: JSON.stringify({ text: text, color: userColor, line: line }),
-      success: function(response) {
-        console.log('success', line);
-      },
-      error: function(error) {
-        console.log('error', error);
-      }
+      success: function() { showToast('Line ' + line + ' sent to matrix.'); },
+      error: function()   { showToast('Failed to send text to matrix.', 'error'); }
     });
   }
 
-  $('#sendButton').on('click', () => sendLine(0, 'textBox', 'colorPicker'));
+  $('#sendButton').on('click',  () => sendLine(0, 'textBox',  'colorPicker'));
   $('#sendButton2').on('click', () => sendLine(1, 'textBox2', 'colorPicker2'));
   $('#sendButton3').on('click', () => sendLine(2, 'textBox3', 'colorPicker3'));
 </script>

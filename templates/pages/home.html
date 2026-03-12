@@ -1,11 +1,43 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Home
-{% endblock title %}
+{% block title %}Home{% endblock title %}
 
 {% block content %}
 
-<h1>Welcome back</h1>
+<div class="page-header">
+  <h1>{{ t('home.welcome') }}</h1>
+  <p>Control your 30×30 LED matrix from your browser.</p>
+</div>
+
+<div class="row">
+  <div class="col-6 col-md-4 col-lg-3 mb-3">
+    <a href="{{ url_for('pages.core.text_route') }}" class="feature-card">
+      <span class="feature-icon">💬</span>
+      <h5>{{ t('nav.text') }}</h5>
+      <p>Display scrolling text on the matrix.</p>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3 mb-3">
+    <a href="{{ url_for('pages.core.draw_route') }}" class="feature-card">
+      <span class="feature-icon">✏️</span>
+      <h5>{{ t('nav.draw') }}</h5>
+      <p>Draw pixel art directly on the grid.</p>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3 mb-3">
+    <a href="{{ url_for('pages.core.image_route') }}" class="feature-card">
+      <span class="feature-icon">🖼️</span>
+      <h5>{{ t('nav.image') }}</h5>
+      <p>Upload or send an image to the matrix.</p>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3 mb-3">
+    <a href="{{ url_for('pages.core.imagepicker_route') }}" class="feature-card">
+      <span class="feature-icon">📂</span>
+      <h5>{{ t('nav.imagepicker') }}</h5>
+      <p>Browse and display saved images.</p>
+    </a>
+  </div>
+</div>
 
 {% endblock content %}

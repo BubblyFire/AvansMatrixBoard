@@ -39,6 +39,16 @@
   <div class="container">
     <a class="navbar-brand" href="{{ url_for('pages.core.home_route') }}">AvansMatrixBoard</a>
 
+    <!-- Always visible: now playing badge + language switcher -->
+    <div class="d-flex align-items-center ml-auto mr-2">
+      <span id="nowPlayingBadge" class="badge badge-pill px-2 py-1 mr-2" style="font-size:0.75rem; display:none;"></span>
+      {% if current_lang == 'en' %}
+        <a class="nav-link text-white py-0" href="{{ url_for('set_language', lang='nl') }}">NL</a>
+      {% else %}
+        <a class="nav-link text-white py-0" href="{{ url_for('set_language', lang='en') }}">EN</a>
+      {% endif %}
+    </div>
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar"
             aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -49,41 +59,49 @@
         <li class="nav-item">
           <a class="nav-link {% if request.endpoint == 'pages.core.home_route' %}active{% endif %}"
             href="{{ url_for('pages.core.home_route') }}">
-            Home
+            {{ t('nav.home') }}
           </a>
         </li>
 
         <li class="nav-item">
           <a class="nav-link {% if request.endpoint == 'pages.core.text_route' %}active{% endif %}"
             href="{{ url_for('pages.core.text_route') }}">
-            Text
+            {{ t('nav.text') }}
           </a>
         </li>
 
         <li class="nav-item">
           <a class="nav-link {% if request.endpoint == 'pages.core.draw_route' %}active{% endif %}"
             href="{{ url_for('pages.core.draw_route') }}">
-            Draw
+            {{ t('nav.draw') }}
           </a>
         </li>
 
         <li class="nav-item">
           <a class="nav-link {% if request.endpoint == 'pages.core.image_route' %}active{% endif %}"
             href="{{ url_for('pages.core.image_route') }}">
-            Image
+            {{ t('nav.image') }}
           </a>
         </li>
 
         <li class="nav-item">
           <a class="nav-link {% if request.endpoint == 'pages.core.imagepicker_route' %}active{% endif %}"
             href="{{ url_for('pages.core.imagepicker_route') }}">
-            Pick an image
+            {{ t('nav.imagepicker') }}
           </a>
         </li>
-                <li class="nav-item">
-          <a class="nav-link {% if request.endpoint == 'pages.core.config_route' %}active{% endif %}"
-            href="{{ url_for('pages.core.config_route') }}">
-            Config
+
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint == 'pages.core.slideshow_route' %}active{% endif %}"
+            href="{{ url_for('pages.core.slideshow_route') }}">
+            {{ t('nav.slideshow') }}
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint == 'pages.core.config_page' %}active{% endif %}"
+            href="{{ url_for('pages.core.config_page') }}">
+            {{ t('nav.config') }}
           </a>
         </li>
       </ul>
@@ -100,8 +118,60 @@
 {% block scripts %}
 {% endblock scripts %}
 
+<script>
+  const NOW_PLAYING_LABELS = { idle: 'Idle', drawing: 'Drawing', text: 'Text', image: 'Image', gif: 'GIF', slideshow: 'Slideshow' };
+  const NOW_PLAYING_COLORS = { idle: '#6c757d', drawing: '#6366f1', text: '#0d6efd', image: '#198754', gif: '#fd7e14', slideshow: '#6f42c1' };
+
+  function updateNowPlaying() {
+    fetch('/status')
+      .then(r => r.json())
+      .then(data => {
+        const badge = document.getElementById('nowPlayingBadge');
+        const type  = data.type || 'idle';
+        const label = data.label ? ` — ${data.label}` : '';
+        const color = NOW_PLAYING_COLORS[type] || '#6c757d';
+
+        badge.textContent = (NOW_PLAYING_LABELS[type] || type) + label;
+        badge.style.background = color;
+        badge.style.color = '#fff';
+        badge.style.display = '';
+      })
+      .catch(() => {});
+  }
+
+  updateNowPlaying();
+  setInterval(updateNowPlaying, 4000);
+</script>
+
 <!-- Bootstrap JS -->
 <script src="/extern/ajax/popper/1.16.0/popper.min.js"></script>
 <script src="/extern/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Toast container (fixed top-right, above everything) -->
+<div id="toastContainer" style="position:fixed; top:1rem; right:1rem; z-index:9999; min-width:220px;"></div>
+
+<script>
+  /**
+   * Show a toast notification.
+   * @param {string} message - The message to display.
+   * @param {'success'|'error'} type - Controls the color. Defaults to 'success'.
+   */
+  function showToast(message, type = 'success') {
+    const id = 'toast-' + Date.now();
+    const bgClass = type === 'error' ? 'bg-danger' : 'bg-success';
+    const html = `
+      <div id="${id}" class="toast text-white ${bgClass} mb-2" role="alert" data-delay="3500">
+        <div class="toast-body d-flex justify-content-between align-items-center">
+          <span>${message}</span>
+          <button type="button" class="ml-3 close text-white" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>`;
+    document.getElementById('toastContainer').insertAdjacentHTML('beforeend', html);
+    const el = document.getElementById(id);
+    $(el).toast('show').on('hidden.bs.toast', () => el.remove());
+  }
+</script>
 </body>
 </html>

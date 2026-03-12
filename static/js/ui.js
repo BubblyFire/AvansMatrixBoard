@@ -1,3 +1,5 @@
+import { openActionMenu } from "./menu.js";
+
 export const UI = {
   browser:     () => document.getElementById("piBrowser"),
   breadcrumb:  () => document.getElementById("piBreadcrumb"),
@@ -13,7 +15,7 @@ export const UI = {
 
 export function makeTitle(text) {
   const t = document.createElement("div");
-  t.className = "text-muted small mt-2 mb-1";
+  t.className = "section-label mt-3 mb-1";
   t.textContent = text;
   return t;
 }
@@ -25,31 +27,40 @@ export function makeMuted(text) {
   return d;
 }
 
-export function makeRow(item) {
+/**
+ * @param {{ kind, name, path, onOpen }} item
+ * @param {{ onSelect: function, currentPath: string, onSuccess: function }} callbacks
+ */
+export function makeRow(item, { onSelect, currentPath, onSuccess } = {}) {
   const row = document.createElement("div");
-  row.className = "d-flex align-items-center justify-content-between p-1 rounded mb-1";
+  row.className = "d-flex align-items-center justify-content-between rounded mb-1";
+  row.style.cssText = 'padding:4px 6px;transition:background .1s;';
+
+  row.addEventListener('mouseenter', () => row.style.background = '#f8fafc');
+  row.addEventListener('mouseleave', () => row.style.background = '');
 
   const left = document.createElement("div");
-  left.className = "d-flex align-items-center gap-2 flex-grow-1";
+  left.className = "d-flex align-items-center flex-grow-1 text-truncate";
   left.style.cursor = "pointer";
   left.onclick = item.onOpen;
 
   const icon = item.kind === "dir" ? "📁" : "🖼️";
   const nameSpan = document.createElement("span");
-  nameSpan.className = item.kind === "file" ? "small text-truncate" : "small";
-  nameSpan.textContent = `${icon} ${item.name}`;
-
+  nameSpan.className = "small text-truncate";
+  nameSpan.textContent = `${icon}  ${item.name}`;
   left.appendChild(nameSpan);
 
   const dots = document.createElement("button");
   dots.type = "button";
-  dots.className = "btn btn-sm btn-light";
+  dots.className = "btn btn-sm btn-light flex-shrink-0 ml-1";
+  dots.style.cssText = 'padding:2px 8px;font-size:1rem;line-height:1;border-radius:6px;';
   dots.textContent = "⋯";
+  dots.title = "More options";
   dots.onclick = (e) => {
     e.stopPropagation();
-    // select it so "Use" button uses the same selection
-    setSelected({ kind: item.kind, name: item.name, path: item.path });
-    openActionMenu(dots, { kind: item.kind, name: item.name, path: item.path });
+    const ctx = { kind: item.kind, name: item.name, path: item.path };
+    onSelect?.(ctx);
+    openActionMenu(dots, ctx, { onSuccess, currentPath });
   };
 
   row.appendChild(left);

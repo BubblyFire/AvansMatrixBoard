@@ -21,7 +21,10 @@ COPY . .
 
 ENV FLASK_ENV=development
 ENV FLASK_DEBUG=1
+ENV DISABLE_MATRIX=1
+ENV UPLOAD_FOLDER=/opt/matrixpi
+ENV FILE_BROWSER_ROOT=/home/avans/user_uploads
 
-EXPOSE 5000
+EXPOSE 80
 
 CMD ["python", "server.py"]

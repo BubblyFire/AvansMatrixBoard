@@ -1,118 +1,177 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Matrix Config
-{% endblock title %}
+{% block title %}Config{% endblock title %}
 
 {% block content %}
-<h1 class="mb-3">Matrix Configuration</h1>
-<p class="text-muted">
-  Pas hier de instellingen aan die in <code>config/config.json</code> worden opgeslagen.
-</p>
+
+<div class="page-header">
+  <h1>{{ t('config.title') }}</h1>
+  <p>{{ t('config.subtitle') }}</p>
+</div>
 
 <div class="row">
-  <div class="col-12 col-md-8 col-lg-6">
-    <div class="card">
-      <div class="card-body">
-        <form method="post" action="/config/save">
+  <div class="col-12 col-md-10 col-lg-7">
+    <form method="post" action="/config/save">
+
+      <!-- ── Hardware ───────────────────────────────────────────── -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <p class="section-label">{{ t('config.section_hardware') }}</p>
 
           <div class="mb-3">
-            <label for="pin" class="form-label">GPIO pin</label>
-            <input
-              type="text"
-              class="form-control"
-              id="pin"
-              name="pin"
-              value="{{ cfg.pin }}"
-              placeholder="D18"
-            >
-            <div class="form-text">
-              Naam van de pin uit het <code>board</code> module, bijv. D18.
+            <label for="pin" class="form-label fw-500">{{ t('config.pin_label') }}</label>
+            <input type="text" class="form-control" id="pin" name="pin"
+                   value="{{ cfg.pin }}" placeholder="D18">
+            <div class="form-text">{{ t('config.pin_help') }}</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="brightness" class="form-label fw-500">{{ t('config.brightness_label') }}</label>
+            <div class="d-flex align-items-center gap-2">
+              <input type="range" class="form-range flex-grow-1" id="brightness_range"
+                     min="0" max="1" step="0.01" value="{{ cfg.brightness }}"
+                     oninput="document.getElementById('brightness').value = this.value">
+              <input type="number" step="0.01" min="0" max="1"
+                     class="form-control" id="brightness" name="brightness"
+                     style="width:80px;"
+                     value="{{ cfg.brightness }}"
+                     oninput="document.getElementById('brightness_range').value = this.value">
+            </div>
+            <div class="form-text">{{ t('config.brightness_help') }}</div>
+          </div>
+
+          <div class="p-3 rounded" style="background:var(--surface-muted);border:1px solid var(--border);">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                     id="auto_write" name="auto_write"
+                     {% if cfg.auto_write %}checked{% endif %}>
+              <label class="form-check-label fw-500" for="auto_write">
+                {{ t('config.auto_write_label') }}
+              </label>
             </div>
           </div>
 
-          <div class="mb-3">
-            <label for="brightness" class="form-label">Brightness</label>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              max="1"
-              class="form-control"
-              id="brightness"
-              name="brightness"
-              value="{{ cfg.brightness }}"
-            >
-            <div class="form-text">
-              Waarde tussen 0 en 1.
-            </div>
-          </div>
-
-          <div class="form-check mb-3">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="auto_write"
-              name="auto_write"
-              {% if cfg.auto_write %}checked{% endif %}
-            >
-            <label class="form-check-label" for="auto_write">
-              NeoPixel auto_write inschakelen
-            </label>
-          </div>
-
-          <div class="mb-3">
-            <label for="scroll_delay" class="form-label">Scroll delay (seconds)</label>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              class="form-control"
-              id="scroll_delay"
-              name="scroll_delay"
-              value="{{ cfg.scroll_delay }}"
-            >
-            <div class="form-text">
-              Vertraging tussen scroll frames (bijv. 0.05 tot 0.2).
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="font_baseline_offset" class="form-label">Font baseline offset</label>
-            <input
-              type="number"
-              class="form-control"
-              id="font_baseline_offset"
-              name="font_baseline_offset"
-              value="{{ cfg.font_baseline_offset }}"
-            >
-            <div class="form-text">
-              Verticale offset van de tekst in pixels (was eerder hardcoded als +3).
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="gif_delay" class="form-label">GIF speed multiplier</label>
-            <input
-              type="number"
-              step="0.1"
-              min="0.1"
-              class="form-control"
-              name="gif_delay"
-              value="{{ cfg.gif_delay }}"
-            />
-            <small class="text-muted">
-              1.0 = normal, lower is faster, higher is slower
-            </small>
-          </div>
-
-          <button type="submit" class="btn btn-primary">
-            Save configuration
-          </button>
-
-        </form>
+        </div>
       </div>
-    </div>
+
+      <!-- ── Text scrolling ─────────────────────────────────────── -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <p class="section-label">{{ t('config.section_text') }}</p>
+
+          <div class="mb-3">
+            <label for="scroll_delay" class="form-label fw-500">{{ t('config.scroll_delay_label') }}</label>
+            <input type="number" step="0.01" min="0"
+                   class="form-control" id="scroll_delay" name="scroll_delay"
+                   value="{{ cfg.scroll_delay }}">
+            <div class="form-text">{{ t('config.scroll_delay_help') }}</div>
+          </div>
+
+          <div class="mb-0">
+            <label for="font_baseline_offset" class="form-label fw-500">{{ t('config.font_offset_label') }}</label>
+            <input type="number" class="form-control"
+                   id="font_baseline_offset" name="font_baseline_offset"
+                   value="{{ cfg.font_baseline_offset }}">
+            <div class="form-text">{{ t('config.font_offset_help') }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── GIF playback ───────────────────────────────────────── -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <p class="section-label">{{ t('config.section_gif') }}</p>
+
+          <div class="mb-0">
+            <label for="gif_delay" class="form-label fw-500">{{ t('config.gif_delay_label') }}</label>
+            <input type="number" step="0.1" min="0.1"
+                   class="form-control" id="gif_delay" name="gif_delay"
+                   value="{{ cfg.gif_delay }}">
+            <div class="form-text">{{ t('config.gif_delay_help') }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── Image processing ───────────────────────────────────── -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <p class="section-label">{{ t('config.section_image') }}</p>
+
+          <div class="row">
+            <div class="col-sm-6 mb-3">
+              <label for="contrast" class="form-label fw-500">{{ t('config.contrast_label') }}</label>
+              <input type="number" step="0.05" min="0"
+                     class="form-control" id="contrast" name="contrast"
+                     value="{{ cfg.contrast }}">
+              <div class="form-text">{{ t('config.contrast_help') }}</div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+              <label for="saturation" class="form-label fw-500">{{ t('config.saturation_label') }}</label>
+              <input type="number" step="0.05" min="0"
+                     class="form-control" id="saturation" name="saturation"
+                     value="{{ cfg.saturation }}">
+              <div class="form-text">{{ t('config.saturation_help') }}</div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+              <label for="gamma" class="form-label fw-500">{{ t('config.gamma_label') }}</label>
+              <input type="number" step="0.05" min="0.01"
+                     class="form-control" id="gamma" name="gamma"
+                     value="{{ cfg.gamma }}">
+              <div class="form-text">{{ t('config.gamma_help') }}</div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+              <label for="posterize_bits" class="form-label fw-500">{{ t('config.posterize_label') }}</label>
+              <input type="number" step="1" min="1" max="8"
+                     class="form-control" id="posterize_bits" name="posterize_bits"
+                     value="{{ cfg.posterize_bits }}">
+              <div class="form-text">{{ t('config.posterize_help') }}</div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+              <label for="black_level" class="form-label fw-500">{{ t('config.black_level_label') }}</label>
+              <input type="number" step="1" min="0" max="255"
+                     class="form-control" id="black_level" name="black_level"
+                     value="{{ cfg.black_level }}">
+              <div class="form-text">{{ t('config.black_level_help') }}</div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+              <label for="black_threshold" class="form-label fw-500">{{ t('config.black_threshold_label') }}</label>
+              <input type="number" step="1" min="0" max="765"
+                     class="form-control" id="black_threshold" name="black_threshold"
+                     value="{{ cfg.black_threshold }}">
+              <div class="form-text">{{ t('config.black_threshold_help') }}</div>
+            </div>
+
+            <div class="col-12 mb-0">
+              <div class="p-3 rounded" style="background:var(--surface-muted);border:1px solid var(--border);">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox"
+                         id="auto_crop" name="auto_crop"
+                         {% if cfg.auto_crop %}checked{% endif %}>
+                  <label class="form-check-label fw-500" for="auto_crop">
+                    {{ t('config.auto_crop_label') }}
+                  </label>
+                  <div class="form-text mt-1">{{ t('config.auto_crop_help') }}</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">
+        {{ t('config.save_btn') }}
+      </button>
+
+    </form>
   </div>
 </div>
+
 {% endblock content %}

@@ -35,11 +35,9 @@ sudo .venv/bin/python server.py
 
 For docker usage see [DOCKER.md](Documentation/DOCKER.md).
 
-> **WARNING** Currently not working
-
 ## Hardware
 
-For a schematic and physical layout of the hardware, see [HARDWARE.md](Documentation/HARDWARE.md).
+For a schematic and physical layout of the hardware, see [HardwareMatrix.md](Documentation/HardwareMatrix.md).
 
 ## Software
 

@@ -1,7 +1,4 @@
-# Flask modules
-from flask import Flask
-
-# Other modules
+from flask import Flask, session, redirect, request
 import os
 
 
@@ -48,5 +45,24 @@ def create_app(debug: bool = False):
 
     app.register_blueprint(api_bp)
     app.register_blueprint(pages_bp)
+
+    # Inject translation helper and current language into every template
+    from app.i18n import get_translation, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE
+
+    @app.context_processor
+    def inject_i18n():
+        lang = session.get('language', DEFAULT_LANGUAGE)
+
+        def t(key, **kwargs):
+            return get_translation(lang, key, **kwargs)
+
+        return {'t': t, 'current_lang': lang}
+
+    # Route to switch the UI language, stored in the session
+    @app.route('/set-language/<lang>')
+    def set_language(lang):
+        if lang in SUPPORTED_LANGUAGES:
+            session['language'] = lang
+        return redirect(request.referrer or '/')
 
     return app
