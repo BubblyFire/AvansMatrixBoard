@@ -19,5 +19,11 @@ class MatrixpiExtension:
             self.matrixboard.init()
             print("MATRIX BOARD INITIALIZED")
 
+    def reload(self):
+        from .matrixboard import MatrixBoard
+        self.matrixboard = MatrixBoard(30, 30)
+        self.matrixboard.init()
+        print("MATRIX BOARD RELOADED")
+
 
 matrixpi = MatrixpiExtension()

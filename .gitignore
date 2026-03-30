@@ -5,3 +5,6 @@
 **/instance
 **/venv
 **/.venv
+/uploads/
+/user_uploads/
+/drawings/

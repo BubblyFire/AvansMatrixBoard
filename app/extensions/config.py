@@ -1,19 +1,6 @@
-"""
-app/extensions/config.py — Persistent configuration for the LED matrix.
-
-Settings are stored in app/config/config.json (created on first save).
-DEFAULT_MATRIX_CONFIG defines all supported keys and their default values.
-
-Use load_matrix_config() to get the current settings (merges file with defaults).
-Use save_matrix_config(cfg) to persist a new set of settings to disk.
-
-All route and extension code should call load_matrix_config() instead of
-reading the JSON file directly, so defaults are always applied correctly.
-"""
-
 import json
 import os
-from flask import current_app
+from .matrixpi import matrixpi
 
 DEFAULT_MATRIX_CONFIG = {
     # Hardware
@@ -27,10 +14,7 @@ DEFAULT_MATRIX_CONFIG = {
 
     # GIF playback
     "gif_delay": 1.0,
-
-    # Captive portal redirect URL (SoftAP IP)
-    "portal_redirect": "http://192.168.50.5/",
-    
+   
     # Image processing
     "contrast": 1.20,
     "saturation": 1.20,
@@ -79,3 +63,5 @@ def save_matrix_config(cfg: dict) -> None:
         print(f"[MatrixConfig] Saved config to {CONFIG_FILE}")
     except Exception as e:
         print(f"[MatrixConfig] Failed to save config: {e}")
+
+    matrixpi.reload()
