@@ -33,10 +33,6 @@ def send_to_board():
     row-major order (left-to-right, top-to-bottom).
     The frontend debounces calls to this endpoint (150 ms) to avoid flooding the Pi.
     """
-    # Skip if running without physical hardware
-    if matrixpi.matrixboard is None:
-        return "", 200
-
     pixels = request.get_json()["value"]
     board_width = matrixpi.matrixboard._width
 

@@ -76,3 +76,46 @@ source .venv/bin/activate
 # Install the dependencies
 pip install -r requirements.txt
 ```
+
+### Step 4: Start the program
+
+The program needs `sudo` because it drives GPIO 18.
+
+```
+# From ~/matrixpi with the virtualenv active
+sudo .venv/bin/python server.py
+```
+
+You should see Flask startup output ending with something like:
+
+```
+ * Running on http://0.0.0.0:80
+```
+
+### Step 5: Verify it works
+
+On another device connected to the same network, open:
+
+```
+http://matrixpi/
+```
+
+Or, if the hostname doesn't resolve, use the Pi's IP address (e.g. `http://192.168.1.42/`). You can find it with `hostname -I` on the Pi.
+
+You should see the home page. Try the **Text** page — typing a message and clicking send should light up the matrix.
+
+### Troubleshooting
+
+| Problem | Fix |
+|---|---|
+| `Permission denied` on GPIO | You forgot `sudo`. The program needs it for GPIO 18. |
+| `Address already in use` on port 80 | Something else is using port 80. `sudo lsof -i :80` shows what. |
+| The web page loads but the matrix stays dark | Check wiring (see [HardwareMatrix.md](HardwareMatrix.md)), the `pin` setting on `/config`, and that audio is disabled (Step 2). |
+| `hostname: matrixpi` doesn't resolve | Use the IP address from `hostname -I`. On Windows, `.local` resolution sometimes requires Bonjour. |
+| `ModuleNotFoundError: No module named 'board'` | `rpi_ws281x` / `Adafruit-Blinka` didn't install. Re-run `pip install -r requirements.txt` inside the virtualenv. |
+
+### Optional next steps
+
+- **Access the Pi without a router** — set up the SoftAP: [SOFTAP.md](SOFTAP.md).
+- **Auto-start matrixpi on boot** — [SYSTEMD.md](SYSTEMD.md).
+- **Change hardware or image-processing settings** — open `/config` in the browser, or read [Config.md](Config.md).

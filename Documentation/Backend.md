@@ -1,5 +1,14 @@
 # Backend Architecture
 
+> **New to Flask?** A few terms used on this page:
+> - **Route** — a URL + a Python function that runs when someone visits it.
+> - **Blueprint** — a group of routes. This project has two: `api_bp` (`/api/*`) and `pages_bp` (the rest).
+> - **Application factory** — the `create_app()` function that builds the Flask app. This pattern makes the app easier to configure and test.
+> - **Extension** — a reusable piece of functionality (e.g. database, CORS, matrix controller).
+> - **Context processor** — code that injects variables into every template automatically. We use one for translations.
+>
+> For more terms, see the glossary in [HowTo.md](HowTo.md#glossary).
+
 ## Entry Point
 
 `server.py` creates the Flask app by calling `create_app(debug=True)` and starts the server on `0.0.0.0:80`.
@@ -25,6 +34,8 @@ Responsibilities:
 
 Both configs use SQLite at `instance/database.db`.
 
+> For every config key (matrix runtime, Flask, environment variables) see **[Config.md](Config.md)**.
+
 ## Extensions (`app/extensions/`)
 
 | File | Purpose |
@@ -44,7 +55,7 @@ Both configs use SQLite at `instance/database.db`.
 DISABLE_MATRIX=1 python server.py
 ```
 
-When set, `matrixpi.matrixboard` is `None`. All routes guard against this and return a 200 without doing anything.
+When set, a `MatrixBoard` is still created but it skips the NeoPixel / `board` imports — all drawing calls update the shadow buffer only. `matrixpi.matrixboard` is never `None` (a previous version used `None` for no-hardware mode; that's gone).
 
 ### MatrixBoard
 
@@ -53,6 +64,7 @@ The `MatrixBoard` class (`matrixboard.py`) controls the 30×30 NeoPixel grid.
 - LEDs are wired in a **serpentine pattern** — even rows go left-to-right, odd rows go right-to-left. `_coord_to_index(x, y)` handles this translation.
 - Text is rendered using `BitmapFont` with the `font5x8.bin` font file (5×8 pixels per character).
 - Hardware settings (pin, brightness, scroll delay, etc.) are read from `app/config/config.json` at startup.
+- A **shadow buffer** (plain Python list, visual row-major order, top-left = index 0) tracks every pixel change. `get_pixels()` exposes it so the `/preview` page can render a live copy of the matrix, and so every feature keeps working with `DISABLE_MATRIX=1`.
 
 ## Routing Structure
 
@@ -86,6 +98,13 @@ Serves HTML pages and handles matrix control requests.
 | `routes/imagepicker.py` | `GET /imagepicker`, `POST /imagelist`, `POST /imagelist_show` |
 | `routes/pi_files.py` | `POST /pi/files`, `POST /pi/dir/mkdir`, `GET /pi/file/preview`, `POST /pi/file/display`, `POST /pi/file/upload`, `POST /pi/path/delete`, `POST /pi/path/rename`, `POST /pi/path/move` |
 | `routes/config.py` | `GET /config`, `POST /config/save` |
+| `routes/slideshow.py` | `GET /slideshow`, `POST /slideshow/start`, `POST /slideshow/stop`, `GET /slideshow/status` |
+| `routes/status.py` | `GET /status` (current "now playing" state) |
+| `routes/clear.py` | `POST /clear` (stop everything and turn off all LEDs) |
+| `routes/preview.py` | `GET /preview`, `GET /preview/state` (live browser preview of the matrix) |
+| `routes/portal.py` | Captive-portal redirects: `GET /hotspot-detect.html`, `GET /generate_204`, `GET /ncsi.txt` |
+
+Route modules are imported in `app/routes/pages/__init__.py` — adding a new route file means importing it there so its handlers attach to `core_bp`.
 
 ## Image Processing (`app/routes/pages/utils/utils.py`)
 

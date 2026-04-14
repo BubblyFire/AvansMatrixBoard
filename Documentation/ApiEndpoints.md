@@ -98,6 +98,112 @@ Saves the matrix hardware configuration to `app/config/config.json`.
 
 ---
 
+### GET /status
+
+Returns what is currently being shown on the matrix. Polled by the navbar's "now playing" badge every few seconds.
+
+**Response:**
+```json
+{ "type": "text", "name": "Hello" }
+```
+
+---
+
+### POST /clear
+
+Stop any running slideshow/GIF, turn off all LEDs, and set the "now playing" state to `idle`.
+
+**Request body:** none
+
+**Response:** `{ "ok": true }`
+
+Wired to the **Clear** button in the navbar.
+
+---
+
+### GET /preview
+
+Live matrix-preview page. Renders a 30×30 grid in the browser that mirrors the shadow buffer in `MatrixBoard`.
+
+---
+
+### GET /preview/state
+
+Returns the current shadow pixel buffer as a flat list. Polled by the preview page a few times per second.
+
+**Response:**
+```json
+{
+  "width":  30,
+  "height": 30,
+  "pixels": [[r, g, b], [r, g, b], ...]
+}
+```
+
+`pixels` is row-major in visual order: index `0` is top-left, `width - 1` is top-right, `width * height - 1` is bottom-right.
+
+---
+
+## Slideshow Endpoints
+
+Slideshows cycle through a folder of images or a hand-picked playlist.
+
+---
+
+### GET /slideshow
+
+Returns the slideshow page.
+
+---
+
+### POST /slideshow/start
+
+Start a slideshow.
+
+**Request body (folder mode):**
+```json
+{ "mode": "folder", "path": "uploads/myfolder", "interval": 5 }
+```
+
+**Request body (playlist mode):**
+```json
+{ "mode": "playlist", "files": ["uploads/a.png", "drawings/b.png"], "interval": 5 }
+```
+
+`interval` is the number of seconds per image (1–300). Paths use the virtual mounts `uploads/`, `user_uploads/`, or `drawings/`.
+
+**Response:** `{ "ok": true }` or `{ "error": "..." }`
+
+---
+
+### POST /slideshow/stop
+
+Stop the running slideshow.
+
+**Response:** `{ "ok": true }`
+
+---
+
+### GET /slideshow/status
+
+Return the current slideshow state (mode, index, running, etc.).
+
+---
+
+## Captive Portal Endpoints
+
+These routes intercept the URLs that phones/laptops hit when connecting to a new Wi-Fi network, and redirect the user to the matrix interface. The redirect target is read from `portal_redirect` in `app/config/config.json`.
+
+| Endpoint | OS | Purpose |
+|----------|-----|---------|
+| `GET /hotspot-detect.html` | iOS / macOS | Apple's captive portal check |
+| `GET /generate_204` | Android / Chrome | Google's captive portal check |
+| `GET /ncsi.txt` | Windows | Microsoft's captive portal check |
+
+Each returns a redirect to the configured portal URL.
+
+---
+
 ## Pi File Browser Endpoints
 
 These routes allow managing files in `/home/avans/user_uploads` on the Raspberry Pi.

@@ -14,6 +14,8 @@ The frontend is built with Flask/Jinja2 templates, Bootstrap 4, jQuery, and vani
 | `pages/draw.html` | `/draw` | Paint pixels on a 30×30 grid |
 | `pages/image.html` | `/image` | Upload an image or browse the Pi file system |
 | `pages/imagepicker.html` | `/imagepicker` | Browse predefined image assets |
+| `pages/slideshow.html` | `/slideshow` | Cycle through a folder of images or a playlist |
+| `pages/preview.html` | `/preview` | Live 30×30 browser render of what's on the matrix |
 | `pages/config.html` | `/config` | Adjust hardware settings |
 
 ## JavaScript Files (`static/js/`)
@@ -28,6 +30,9 @@ The frontend is built with Flask/Jinja2 templates, Bootstrap 4, jQuery, and vani
 | `menu.js` | Image page | Context menu behaviour |
 | `actions.js` | Image page | File actions (rename, delete, move) |
 | `functions.js` | Image page | Path utilities (`joinPath`, `parentPath`) |
+| `modal.js` | Image page | Modal dialog helpers (confirm, input) |
+| `slideshow.js` | Slideshow page | Folder/playlist selection, start/stop, status polling |
+| `preview.js` | Preview page | Builds the pixel grid and polls `/preview/state` a few times per second |
 
 ## Pages
 
@@ -62,6 +67,21 @@ Two sections:
 ### Image Picker Page (`imagepicker.html`)
 
 Browses predefined image assets stored in `static/assets/`. Folders are loaded lazily on first open. Clicking an image sends it to the matrix via `POST /imagelist_show`.
+
+### Slideshow Page (`slideshow.html`)
+
+Plays a sequence of images on the matrix, switching every N seconds. Two modes:
+
+- **Folder mode** — pick a folder under `uploads/`, `user_uploads/`, or `drawings/`; every image in it is shown in order.
+- **Playlist mode** — hand-pick individual files across folders.
+
+Controlled via `POST /slideshow/start`, `POST /slideshow/stop`, and polls `GET /slideshow/status`.
+
+### Preview Page (`preview.html`)
+
+A live 30×30 grid of `<div>` cells that mirrors the matrix shadow buffer in the browser. Polls `GET /preview/state` every 250 ms and only touches the DOM when a cell's colour actually changes. Polling pauses while the tab is hidden.
+
+Especially useful with `DISABLE_MATRIX=1` — the whole app is usable without LED hardware.
 
 ### Config Page (`config.html`)
 
@@ -107,3 +127,9 @@ showToast('Failed to connect.', 'error');      // red
 | Image | `/pi/path/move` | POST | Move a file or folder |
 | Image picker | `/imagelist` | POST | Get image directory listing |
 | Image picker | `/imagelist_show` | POST | Display a predefined image |
+| Slideshow | `/slideshow/start` | POST | Start a folder or playlist slideshow |
+| Slideshow | `/slideshow/stop` | POST | Stop the current slideshow |
+| Slideshow | `/slideshow/status` | GET | Current slideshow state |
+| Preview | `/preview/state` | GET | Current shadow pixel buffer for the live preview |
+| Navbar badge | `/status` | GET | What is currently playing on the matrix |
+| Navbar clear | `/clear` | POST | Stop everything and turn off all LEDs |

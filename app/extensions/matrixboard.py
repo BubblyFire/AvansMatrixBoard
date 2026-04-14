@@ -1,31 +1,45 @@
 # Controls the 30x30 NeoPixel LED matrix.
 # Handles pixel drawing, text rendering and the serpentine wiring layout.
+#
+# Every drawing call also writes into a shadow buffer in visual row-major
+# order (top-left = index 0). That buffer is what the web preview reads,
+# and it also lets the app run with DISABLE_MATRIX=1 without any LED hardware.
 
 import time
 import board
 import neopixel
+
 from .bitmapfont import BitmapFont
 from .config import load_matrix_config
 
+
 class MatrixBoard:
-    def __init__(self, width, height):
+    def __init__(self, width, height, hardware=True):
         """Store board dimensions and load hardware settings from config."""
         self._width = width
         self._height = height
+        self._hardware = hardware
+        self._pixels = None  # NeoPixel strip, created in init() if hardware
+
+        # Shadow buffer in visual row-major order: buffer[y * width + x] = (r, g, b).
+        # (0, 0) is top-left regardless of how the physical strip is wired.
+        self._buffer = [(0, 0, 0)] * (width * height)
 
         self._config = load_matrix_config()
         self._scroll_delay = self._config.get("scroll_delay", 0.1)
         self._font_offset = self._config.get("font_baseline_offset", 3)
 
     def init(self):
-        pin_name = self._config.get("pin", "D18")
-        pin = getattr(board, pin_name)
+        if self._hardware:
+            pin_name = self._config.get("pin", "D18")
+            pin = getattr(board, pin_name)
 
-        brightness = float(self._config.get("brightness", 0.3))
-        auto_write = bool(self._config.get("auto_write", False))
+            brightness = float(self._config.get("brightness", 0.3))
+            auto_write = bool(self._config.get("auto_write", False))
 
-        # Create the NeoPixel strip for the full grid (width * height LEDs)
-        self._pixels = neopixel.NeoPixel(pin, self._width * self._height, auto_write=auto_write, brightness=brightness)
+            # Create the NeoPixel strip for the full grid (width * height LEDs)
+            self._pixels = neopixel.NeoPixel(pin, self._width * self._height, auto_write=auto_write, brightness=brightness)
+
         self.clear()
         self.show()
 
@@ -37,8 +51,11 @@ class MatrixBoard:
         """Set a single pixel at (x, y) to color (r, g, b). Out-of-bounds coords are silently ignored."""
         if x < 0 or x >= self._width or y < 0 or y >= self._height:
             return
-        index = self._coord_to_index(x, y)
-        self._pixels[index] = color
+        color = (int(color[0]), int(color[1]), int(color[2]))
+        self._buffer[y * self._width + x] = color
+        if self._pixels is not None:
+            index = self._coord_to_index(x, y)
+            self._pixels[index] = color
 
     def _coord_to_index(self, x, y):
         # The LED strip is wired in a serpentine pattern:
@@ -81,8 +98,19 @@ class MatrixBoard:
 
     def clear(self):
         """Turn off all LEDs (fill the entire strip with black)."""
-        self._pixels.fill((0, 0, 0))
+        self._buffer = [(0, 0, 0)] * (self._width * self._height)
+        if self._pixels is not None:
+            self._pixels.fill((0, 0, 0))
 
     def show(self):
         """Push the current pixel buffer to the physical LEDs."""
-        self._pixels.show()
+        if self._pixels is not None:
+            self._pixels.show()
+
+    def get_pixels(self):
+        """Return the shadow buffer as a flat list of [r, g, b] in visual row-major order.
+
+        Index 0 is top-left, index width-1 is top-right, index width*height-1 is bottom-right.
+        Safe to call whether or not hardware is attached.
+        """
+        return [list(c) for c in self._buffer]

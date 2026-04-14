@@ -9,7 +9,7 @@ Improvements and ideas for the AvansMatrixBoard project.
 | Status | Item | Notes |
 |--------|------|-------|
 | `partial` | **Mobile-friendly interface** | Bootstrap handles basic responsiveness. The draw page (canvas with zoom/pan) is not well-suited for touch yet. |
-| `todo` | **"Clear matrix" button on every page** | `clear_matrix()` already exists in `utils.py`. Needs a `POST /clear` endpoint and a button in `base.html` navbar. |
+| `done` | **"Clear matrix" button on every page** | `POST /clear` calls `clear_matrix()`; button lives in the navbar in `base.html`. |
 | `todo` | **Dark/light mode toggle** | Add a theme toggle to the navbar. Store preference in `localStorage`. |
 | `done` | **Toasts / feedback notifications** | `showToast()` is available globally via `base.html` and used across all pages. |
 | `todo` | **Keyboard shortcuts** | Useful on the draw page: `E` for erase, `D` for draw, `Ctrl+Z` for undo, `Space` to toggle pan mode. |
@@ -77,7 +77,7 @@ Improvements and ideas for the AvansMatrixBoard project.
 
 | Status | Item | Notes |
 |--------|------|-------|
-| `todo` | **Live matrix preview in browser** | Render the current matrix state as a 30×30 grid in the web UI. |
+| `done` | **Live matrix preview in browser** | `/preview` page polls `/preview/state`, which returns `MatrixBoard.get_pixels()` (shadow buffer in visual row-major order). Works with `DISABLE_MATRIX=1`. |
 | `done` | **"Now playing" indicator** | Badge in the navbar polls `/status` every 4 seconds and shows the current type and filename. |
 | `todo` | **System stats on home page** | Show Pi CPU temp, memory usage, and uptime on the home page. Useful for knowing if the Pi is struggling. |
 

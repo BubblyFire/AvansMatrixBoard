@@ -16,10 +16,6 @@ def send_text():
     Expects JSON: {"text": "Hello", "color": "#ff0000", "line": 0}
     Clears only the target row before rendering so other rows are untouched.
     """
-    # Skip if running without physical hardware
-    if matrixpi.matrixboard is None:
-        return "", 200
-
     json_request = request.get_json()
     text = json_request["text"]
     hex_color = json_request["color"]

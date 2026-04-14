@@ -2,6 +2,13 @@
 
 matrixpi repository for Avans VSR assignment.
 
+## Documentation
+
+- **[Documentation/README.md](Documentation/README.md)** — full documentation index.
+- **[Documentation/GettingStarted.md](Documentation/GettingStarted.md)** — run the app on your own laptop in 5 minutes (no Raspberry Pi needed). **Start here if you're new.**
+- **[Documentation/Overview.md](Documentation/Overview.md)** — what the project is and how the pieces fit together.
+- **[Documentation/HowTo.md](Documentation/HowTo.md)** — cookbook for common changes (add a page, translation, setting, etc.).
+
 ## Usage
 
 ### Setup

@@ -39,9 +39,12 @@
   <div class="container">
     <a class="navbar-brand" href="{{ url_for('pages.core.home_route') }}">AvansMatrixBoard</a>
 
-    <!-- Always visible: now playing badge + language switcher -->
+    <!-- Always visible: now playing badge + clear button + language switcher -->
     <div class="d-flex align-items-center ml-auto mr-2">
       <span id="nowPlayingBadge" class="badge badge-pill px-2 py-1 mr-2" style="font-size:0.75rem; display:none;"></span>
+      <button id="clearMatrixBtn" type="button" class="btn btn-sm btn-outline-light mr-2" style="font-size:0.75rem;">
+        {{ t('nav.clear') }}
+      </button>
       {% if current_lang == 'en' %}
         <a class="nav-link text-white py-0" href="{{ url_for('set_language', lang='nl') }}">NL</a>
       {% else %}
@@ -99,6 +102,13 @@
         </li>
 
         <li class="nav-item">
+          <a class="nav-link {% if request.endpoint == 'pages.core.preview_route' %}active{% endif %}"
+            href="{{ url_for('pages.core.preview_route') }}">
+            {{ t('nav.preview') }}
+          </a>
+        </li>
+
+        <li class="nav-item">
           <a class="nav-link {% if request.endpoint == 'pages.core.config_page' %}active{% endif %}"
             href="{{ url_for('pages.core.config_page') }}">
             {{ t('nav.config') }}
@@ -141,6 +151,21 @@
 
   updateNowPlaying();
   setInterval(updateNowPlaying, 4000);
+
+  // Clear-matrix button in the navbar
+  const CLEAR_CONFIRM = {{ t('clear.confirm') | tojson }};
+  const CLEAR_SUCCESS = {{ t('clear.success') | tojson }};
+  const CLEAR_FAILED  = {{ t('clear.failed')  | tojson }};
+  document.getElementById('clearMatrixBtn').addEventListener('click', () => {
+    if (!confirm(CLEAR_CONFIRM)) return;
+    fetch('/clear', { method: 'POST' })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(() => {
+        showToast(CLEAR_SUCCESS);
+        updateNowPlaying();
+      })
+      .catch(() => showToast(CLEAR_FAILED, 'error'));
+  });
 </script>
 
 <!-- Bootstrap JS -->

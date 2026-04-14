@@ -2,9 +2,10 @@
 
 ## Schematic
 
-Figure 1 shows the schematic of the matrixpi hardware. The PCM_CLK pin is the pin that send the data to the logic level shifter. The shifter the sends the data to the neopixel. The neopixels and the logic level shifter are powered by the 5V power supply. The RPI is powered by its own USB power supply.
+Figure 1 shows the schematic of the matrixpi hardware. The PCM_CLK pin sends the data to the logic level shifter. The shifter then sends the data to the NeoPixel. The NeoPixels and the logic level shifter are powered by the 5V power supply. The RPI is powered by its own USB power supply.
 
-![matrixpi schematic](Design/matrixpi_schem.png)
+
+<!-- ![matrixpi schematic](Design/matrixpi_schem.png) -->
 *Figure 1: matrixpi schematic*
 
 ### RPI pins
@@ -36,5 +37,5 @@ Figure 1 shows the schematic of the matrixpi hardware. The PCM_CLK pin is the pi
 
 Figure 2 shows the layout of the matrixpi hardware on a breadboard.
 
-![matrixpi physical layout](Design/matrixpi_bb.png)
+<!-- ![matrixpi physical layout](Design/matrixpi_bb.png) -->
 *Figure 2: matrixpi physical layout*

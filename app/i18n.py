@@ -9,7 +9,20 @@ TRANSLATIONS = {
         'nav.image':        'Image',
         'nav.imagepicker':  'Pick an image',
         'nav.slideshow':    'Slideshow',
+        'nav.preview':      'Preview',
         'nav.config':       'Config',
+        'nav.clear':        'Clear',
+
+        # Preview page
+        'preview.title':    'Live Matrix Preview',
+        'preview.subtitle': 'Shows what is currently on the LED matrix. Updates a few times per second.',
+        'preview.paused':   'Paused',
+        'preview.live':     'Live',
+
+        # Clear button confirmation
+        'clear.confirm':    'Clear the matrix?',
+        'clear.success':    'Matrix cleared.',
+        'clear.failed':     'Failed to clear the matrix.',
 
         # Home page
         'home.title':       'Home',
@@ -106,7 +119,20 @@ TRANSLATIONS = {
         'nav.image':        'Afbeelding',
         'nav.imagepicker':  'Kies een afbeelding',
         'nav.slideshow':    'Diashow',
+        'nav.preview':      'Voorbeeld',
         'nav.config':       'Instellingen',
+        'nav.clear':        'Leeg',
+
+        # Voorbeeldpagina
+        'preview.title':    'Live matrix-voorbeeld',
+        'preview.subtitle': 'Toont wat er nu op de LED-matrix staat. Ververst enkele keren per seconde.',
+        'preview.paused':   'Gepauzeerd',
+        'preview.live':     'Live',
+
+        # Leeg-knop bevestiging
+        'clear.confirm':    'Matrix leegmaken?',
+        'clear.success':    'Matrix leeggemaakt.',
+        'clear.failed':     'Matrix leegmaken mislukt.',
 
         # Home pagina
         'home.title':       'Home',

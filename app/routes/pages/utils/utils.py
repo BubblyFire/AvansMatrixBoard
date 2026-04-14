@@ -99,9 +99,6 @@ def draw_to_screen(img: Image.Image, width: int, height: int) -> None:
     if posterize_bits and posterize_bits < 8:
         img = ImageOps.posterize(img, posterize_bits)
 
-    if matrixpi.matrixboard is None:
-        return
-
     matrixpi.matrixboard.clear()
     for y in range(img.size[1]):
         for x in range(img.size[0]):
@@ -191,8 +188,6 @@ def clear_matrix() -> None:
     stop_slideshow()
     stop_animation()
     set_now_playing("idle")
-    if matrixpi.matrixboard is None:
-        return
     matrixpi.matrixboard.clear()
     matrixpi.matrixboard.show()
 
