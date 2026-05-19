@@ -19,7 +19,7 @@
 </head>
 <body class="bg-light">
 
-{% with messages = get_flashed_messages(with_categories=true, category_filter=["success", "info"]) %}
+{% with messages = get_flashed_messages(with_categories=true, category_filter=["success", "info", "warning", "danger"]) %}
   {% if messages %}
     <div class="container mt-2">
       {% for category, message in messages %}

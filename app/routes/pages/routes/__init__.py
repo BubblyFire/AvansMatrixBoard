@@ -5,3 +5,8 @@ from . import image_uploads
 from . import imagepicker
 from . import pi_files
 from . import config
+from . import status
+from . import slideshow
+from . import portal
+from . import clear
+from . import preview

@@ -84,8 +84,8 @@ function buildUI(data, parent) {
         e.innerHTML = `<img class="fleximage" src="${i.src}" alt="${i.alt}"><span class="flexlabel">${i.desc}</span>`;
 
         e.addEventListener("click", () => {
-            e.classList.add("selected");
             selectImage(i.src, i.desc);
+            e.classList.add("selected");
         });
 
         parent.appendChild(e);

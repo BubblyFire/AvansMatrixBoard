@@ -48,7 +48,9 @@ def safe_join_under_root(root: str, *paths: str) -> str:
     real_root = os.path.realpath(root)
     real_path = os.path.realpath(joined)
 
-    if not real_path.startswith(real_root):
+    # Use a path-segment check, not a plain prefix check: a bare startswith()
+    # would wrongly accept e.g. "/data/uploads_evil" as inside "/data/uploads".
+    if real_path != real_root and not real_path.startswith(real_root + os.sep):
         raise ValueError("Path escapes restricted root")
 
     return real_path

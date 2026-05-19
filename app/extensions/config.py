@@ -1,6 +1,5 @@
 import json
 import os
-from .matrixpi import matrixpi
 
 DEFAULT_MATRIX_CONFIG = {
     # Hardware
@@ -23,6 +22,9 @@ DEFAULT_MATRIX_CONFIG = {
     "black_level": 6,
     "black_threshold": 28,
     "auto_crop": True,
+
+    # Captive portal
+    "portal_redirect": "http://192.168.50.5/",
 }
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -64,4 +66,5 @@ def save_matrix_config(cfg: dict) -> None:
     except Exception as e:
         print(f"[MatrixConfig] Failed to save config: {e}")
 
+    from .matrixpi import matrixpi
     matrixpi.reload()

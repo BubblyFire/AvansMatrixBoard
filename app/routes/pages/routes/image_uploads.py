@@ -31,13 +31,13 @@ def _show_image_from_bytes(data: bytes) -> None:
 def image_route():
     if request.method == "POST":
         if "file" not in request.files:
-            flash("No file part")
+            flash("No file part", "warning")
             return redirect(request.url)
 
         file = request.files["file"]
 
         if file.filename == "":
-            flash("No selected file")
+            flash("No selected file", "warning")
             return redirect(request.url)
 
         if file and allowed_file(file.filename):

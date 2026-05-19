@@ -23,7 +23,7 @@ Improvements and ideas for the AvansMatrixBoard project.
 | Status | Item | Notes |
 |--------|------|-------|
 | `done` | **Serve on port 80** | Server binds to `0.0.0.0:80`. Requires `sudo` on the Pi. |
-| `done` | **Captive portal** | Flask routes in `portal.py` intercept OS connectivity checks and redirect to the matrix interface. DNS redirect via dnsmasq. |
+| `todo` | **Captive portal** | Flask routes in `portal.py` intercept OS connectivity checks and redirect to the matrix interface. DNS redirect via dnsmasq. |
 | `done` | **Open Wi-Fi (no password)** | Currently the SoftAP requires no password to connect. |
 
 ---
