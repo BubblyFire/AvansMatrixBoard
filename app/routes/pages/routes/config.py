@@ -18,9 +18,6 @@ def config_save():
     f = request.form
 
     # ── Hardware ─────────────────────────────────────────────────────
-    pin = f.get("pin", cfg["pin"])
-    cfg["pin"] = pin.strip() if pin else "D18"
-
     try:
         cfg["brightness"] = max(0.0, min(1.0, float(f.get("brightness", cfg["brightness"]))))
     except (TypeError, ValueError):

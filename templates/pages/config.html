@@ -19,13 +19,6 @@
           <p class="section-label">{{ t('config.section_hardware') }}</p>
 
           <div class="mb-3">
-            <label for="pin" class="form-label fw-500">{{ t('config.pin_label') }}</label>
-            <input type="text" class="form-control" id="pin" name="pin"
-                   value="{{ cfg.pin }}" placeholder="D18">
-            <div class="form-text">{{ t('config.pin_help') }}</div>
-          </div>
-
-          <div class="mb-3">
             <label for="brightness" class="form-label fw-500">{{ t('config.brightness_label') }}</label>
             <div class="d-flex align-items-center gap-2">
               <input type="range" class="form-range flex-grow-1" id="brightness_range"

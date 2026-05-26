@@ -55,6 +55,10 @@ def save_matrix_config(cfg: dict) -> None:
     Write cfg to disk, keeping only the known keys from DEFAULT_MATRIX_CONFIG.
 
     Unknown/extra keys are stripped to keep the config file clean.
+
+    Side effect: also triggers `matrixpi.reload()` at the end so changes take
+    effect immediately, without a server restart. The runtime import below is
+    deliberate — it avoids a circular import at module load time.
     """
     # Only persist keys that belong to the known schema
     filtered = {k: cfg.get(k, v) for k, v in DEFAULT_MATRIX_CONFIG.items()}

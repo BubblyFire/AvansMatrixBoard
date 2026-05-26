@@ -10,6 +10,10 @@
   .ip-layout {
     grid-template-columns: 1fr;
   }
+  /* Sticky preview steals half the viewport on phones — let it scroll with the page. */
+  .ip-preview-card {
+    position: static;
+  }
 }
 
 /* ── Folder sidebar ─────────────────────────────────────────────── */

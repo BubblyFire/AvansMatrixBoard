@@ -92,7 +92,9 @@ Returns the configuration page.
 
 Saves the matrix hardware configuration to `app/config/config.json`.
 
-**Form fields:** `pin`, `brightness`, `auto_write`, `scroll_delay`, `font_baseline_offset`, `gif_delay`
+**Form fields:** `brightness`, `auto_write`, `scroll_delay`, `font_baseline_offset`, `gif_delay`, `contrast`, `saturation`, `gamma`, `posterize_bits`, `black_level`, `black_threshold`, `auto_crop`
+
+> `pin` is intentionally **not** accepted from this form. It lives in `app/config/config.json` only — see [Config.md](Config.md).
 
 **Response:** Redirects to `GET /config`
 

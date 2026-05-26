@@ -110,7 +110,7 @@ You should see the home page. Try the **Text** page — typing a message and cli
 |---|---|
 | `Permission denied` on GPIO | You forgot `sudo`. The program needs it for GPIO 18. |
 | `Address already in use` on port 80 | Something else is using port 80. `sudo lsof -i :80` shows what. |
-| The web page loads but the matrix stays dark | Check wiring (see [HardwareMatrix.md](HardwareMatrix.md)), the `pin` setting on `/config`, and that audio is disabled (Step 2). |
+| The web page loads but the matrix stays dark | Check wiring (see [HardwareMatrix.md](HardwareMatrix.md)), the `pin` value in `app/config/config.json` (default `D18`), and that audio is disabled (Step 2). |
 | `hostname: matrixpi` doesn't resolve | Use the IP address from `hostname -I`. On Windows, `.local` resolution sometimes requires Bonjour. |
 | `ModuleNotFoundError: No module named 'board'` | `rpi_ws281x` / `Adafruit-Blinka` didn't install. Re-run `pip install -r requirements.txt` inside the virtualenv. |
 

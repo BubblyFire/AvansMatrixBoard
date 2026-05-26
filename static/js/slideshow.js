@@ -97,7 +97,7 @@ function renderBrowser(data, currentPath, container) {
 
 function makeRow(icon, label, isFile, onClick) {
     const row = document.createElement('div');
-    row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:0.875rem;';
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:10px 12px;min-height:44px;border-radius:6px;cursor:pointer;font-size:0.875rem;';
     row.addEventListener('mouseenter', () => row.style.background = '#e2e8f0');
     row.addEventListener('mouseleave', () => row.style.background = '');
 
@@ -169,7 +169,7 @@ function renderPlaylist() {
     container.innerHTML = '';
     playlist.forEach(({ path, name }, i) => {
         const item = document.createElement('div');
-        item.style.cssText = 'display:flex;align-items:center;gap:6px;padding:4px 8px;font-size:0.82rem;border-radius:4px;';
+        item.style.cssText = 'display:flex;align-items:center;gap:6px;padding:10px 12px;min-height:44px;font-size:0.82rem;border-radius:4px;';
         item.addEventListener('mouseenter', () => item.style.background = '#f1f5f9');
         item.addEventListener('mouseleave', () => item.style.background = '');
 
@@ -180,7 +180,7 @@ function renderPlaylist() {
 
         const del = document.createElement('button');
         del.textContent = '×';
-        del.style.cssText = 'border:none;background:none;color:#ef4444;cursor:pointer;font-size:1rem;padding:0 2px;flex-shrink:0;';
+        del.style.cssText = 'border:none;background:none;color:#ef4444;cursor:pointer;font-size:1.25rem;padding:8px 12px;min-width:44px;min-height:44px;flex-shrink:0;';
         del.addEventListener('click', () => removeFromPlaylist(i));
 
         item.append(nameEl, del);

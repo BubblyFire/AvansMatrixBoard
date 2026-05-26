@@ -14,7 +14,6 @@ Improvements and ideas for the AvansMatrixBoard project.
 | `done` | **Toasts / feedback notifications** | `showToast()` is available globally via `base.html` and used across all pages. |
 | `todo` | **Keyboard shortcuts** | Useful on the draw page: `E` for erase, `D` for draw, `Ctrl+Z` for undo, `Space` to toggle pan mode. |
 | `todo` | **Quick brightness slider in navbar** | A small slider in the navbar that calls `POST /config/save` on change. Right now brightness is only adjustable via the `/config` page. |
-| `todo` | **Config restart warning** | Show a warning on the `/config` page when a setting that requires a Pi restart is changed (e.g. GPIO pin). |
 
 ---
 

@@ -41,7 +41,7 @@ LED Matrix (30×30)
 - **Image picker** — Browse and select from predefined images stored on the Pi
 - **Pi file browser** — Browse, upload, rename, move and delete files on the Pi
 - **Animated GIF** — Display animated GIFs with configurable playback speed
-- **Config** — Adjust hardware settings (brightness, pin, scroll speed, etc.)
+- **Config** — Adjust runtime settings (brightness, scroll speed, image processing, etc.)
 - **Language switcher** — UI available in English and Dutch
 
 ## Technologies Used

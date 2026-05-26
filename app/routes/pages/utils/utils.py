@@ -7,9 +7,10 @@ from .config import ALLOWED_EXTENSIONS
 from .state import set_now_playing, set_slideshow_state
 from app.extensions.config import load_matrix_config
 
-_STOP_TIMEOUT_S     = 1.0   # seconds to wait for GIF thread to stop
-_GIF_DEFAULT_MS     = 100   # fallback frame duration when GIF has no duration metadata
-_GIF_MIN_DELAY_S    = 0.02  # minimum frame delay to prevent runaway loops
+_STOP_TIMEOUT_S            = 1.0   # seconds to wait for GIF thread to stop
+_SLIDESHOW_STOP_TIMEOUT_S  = 2.0   # seconds to wait for slideshow thread to stop
+_GIF_DEFAULT_MS            = 100   # fallback frame duration when GIF has no duration metadata
+_GIF_MIN_DELAY_S           = 0.02  # minimum frame delay to prevent runaway loops
 
 _gif_thread = None
 _gif_stop = threading.Event()
@@ -220,13 +221,13 @@ def _launch_slideshow(label: str, interval: float, abs_folder=None, file_list=No
 
 
 def stop_slideshow() -> None:
-    """Signal the slideshow thread to stop and wait up to 2 s for it to finish."""
+    """Signal the slideshow thread to stop and wait up to _SLIDESHOW_STOP_TIMEOUT_S for it to finish."""
     global _slideshow_thread
     with _slideshow_lock:
         _slideshow_stop.set()
         thread = _slideshow_thread
     if thread and thread.is_alive():
-        thread.join(timeout=2.0)
+        thread.join(timeout=_SLIDESHOW_STOP_TIMEOUT_S)
     with _slideshow_lock:
         _slideshow_thread = None
         _slideshow_stop.clear()

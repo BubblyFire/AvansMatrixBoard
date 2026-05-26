@@ -6,11 +6,13 @@
 # and it also lets the app run with DISABLE_MATRIX=1 without any LED hardware.
 
 import time
-import board
-import neopixel
 
 from .bitmapfont import BitmapFont
 from .config import load_matrix_config
+
+# board / neopixel are imported lazily inside init() so the app can run on
+# non-Pi hosts (Docker on x86, dev laptops) without the hardware libs failing
+# at import time with "Board not supported".
 
 
 class MatrixBoard:
@@ -29,8 +31,16 @@ class MatrixBoard:
         self._scroll_delay = self._config.get("scroll_delay", 0.1)
         self._font_offset = self._config.get("font_baseline_offset", 3)
 
+    @property
+    def hardware(self) -> bool:
+        """True if this board is driving real LEDs; False in shadow-only mode."""
+        return self._hardware
+
     def init(self):
         if self._hardware:
+            import board
+            import neopixel
+
             pin_name = self._config.get("pin", "D18")
             pin = getattr(board, pin_name)
 

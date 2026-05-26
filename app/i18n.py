@@ -78,8 +78,6 @@ TRANSLATIONS = {
         'config.save_btn':              'Save configuration',
         # Hardware section
         'config.section_hardware':      'Hardware',
-        'config.pin_label':             'GPIO pin',
-        'config.pin_help':              'Name of the pin from the board module, e.g. D18.',
         'config.brightness_label':      'Brightness',
         'config.brightness_help':       'Value between 0 and 1.',
         'config.auto_write_label':      'Enable NeoPixel auto_write',
@@ -188,8 +186,6 @@ TRANSLATIONS = {
         'config.save_btn':              'Configuratie opslaan',
         # Hardware sectie
         'config.section_hardware':      'Hardware',
-        'config.pin_label':             'GPIO pin',
-        'config.pin_help':              'Naam van de pin uit de board module, bijv. D18.',
         'config.brightness_label':      'Helderheid',
         'config.brightness_help':       'Waarde tussen 0 en 1.',
         'config.auto_write_label':      'NeoPixel auto_write inschakelen',

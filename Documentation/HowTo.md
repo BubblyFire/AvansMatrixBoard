@@ -108,13 +108,13 @@ From Python, go through the `matrixpi` extension:
 ```python
 from app.extensions import matrixpi
 
-if matrixpi.matrixboard is not None:      # always check — might be None in dev
-    matrixpi.matrixboard.clear()
-    matrixpi.matrixboard.draw_text("Hi", color=(255, 0, 0), line=0)
-    matrixpi.matrixboard.show()
+board = matrixpi.matrixboard
+board.clear()
+board.render_text(0, 0, "Hi", color=(255, 0, 0))
+board.show()
 ```
 
-The `is not None` check lets your code work on a laptop where `DISABLE_MATRIX=1` is set.
+`matrixpi.matrixboard` is always a valid `MatrixBoard` instance after `create_app()` runs — even with `DISABLE_MATRIX=1`. In that mode the board still updates an in-memory shadow buffer (which `/preview` renders) but skips the physical LED calls. If you specifically need to know whether real hardware is attached, check `board.hardware` (read-only `bool`).
 
 ## Display an image from disk
 

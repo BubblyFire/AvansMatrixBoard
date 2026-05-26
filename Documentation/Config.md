@@ -18,7 +18,7 @@ Runtime settings for the LED matrix. Loaded on demand by `load_matrix_config()` 
 
 | Key | Type | Default | Range / Valid values | Purpose |
 |---|---|---|---|---|
-| `pin` | string | `"D18"` | A `board` module pin name (`D10`, `D12`, `D18`, `D21`) | NeoPixel data pin. Changing this requires the Pi to be rewired. |
+| `pin` | string | `"D18"` | A `board` module pin name (`D10`, `D12`, `D18`, `D21`) | NeoPixel data pin. Not exposed on `/config`; edit `app/config/config.json` by hand and restart. Changing this also requires the Pi to be rewired. |
 | `brightness` | float | `0.3` | `0.0` – `1.0` | Global LED brightness. Higher = brighter but more current/heat. |
 | `auto_write` | bool | `false` | — | If `true`, the LED strip updates immediately on every pixel change (slower but simpler). If `false`, the code calls `show()` explicitly after drawing a full frame. Leave `false` for normal use. |
 
@@ -58,9 +58,9 @@ Applied by `draw_to_screen()` in `app/routes/pages/utils/utils.py` before pushin
 
 ### Editing config.json
 
-**Option A — the web UI (recommended).** Go to `/config` in the browser. Every key above except `portal_redirect` has a form field. Hitting **Save** calls `POST /config/save`, which validates and clamps each value.
+**Option A — the web UI (recommended).** Go to `/config` in the browser. Every key above except `pin` and `portal_redirect` has a form field. Hitting **Save** calls `POST /config/save`, which validates and clamps each value.
 
-**Option B — edit the file directly.** Stop the server, edit `app/config/config.json`, restart. Use this for keys not exposed on the page (currently just `portal_redirect`).
+**Option B — edit the file directly.** Stop the server, edit `app/config/config.json`, restart. Use this for keys not exposed on the page (`pin` and `portal_redirect`).
 
 ---
 
@@ -94,7 +94,7 @@ Read directly by `os.environ.get(...)` in various places. Use these to change be
 |---|---|---|---|
 | `FLASK_DEBUG` | unset | `app/__init__.py` | If truthy, forces dev config even when `create_app(debug=False)`. |
 | `SECRET_KEY` | `"YOUR-FALLBACK-SECRET-KEY"` | `app/config/dev.py`, `prod.py` | Flask session signing key. **Must be set for production.** |
-| `DISABLE_MATRIX` | unset | `app/extensions/matrixpi.py` | If set (to anything truthy), `matrixpi.matrixboard` is `None` and hardware calls are skipped. Required to run on a laptop without LEDs. |
+| `DISABLE_MATRIX` | unset | `app/extensions/matrixpi.py` | If set (to anything truthy), `MatrixBoard` runs in shadow-only mode: hardware libraries (`board`, `neopixel`) are never imported and `matrixpi.matrixboard.hardware` is `False`. The shadow buffer still updates so `/preview` and every route keep working. Required to run on a laptop without LEDs. |
 | `UPLOAD_FOLDER` | `<repo>/uploads` | `app/routes/pages/utils/config.py` | Where `/image` uploads are stored. |
 | `FILE_BROWSER_ROOT` | `<repo>/user_uploads` | same | Root folder the `/pi/*` file browser exposes. |
 | `DRAWINGS_FOLDER` | `<repo>/drawings` | same | Where drawings saved from the `/draw` page go. |
@@ -125,7 +125,7 @@ The slideshow endpoints accept paths like `uploads/myfolder/pic.png` and resolve
 
 **Text scrolls too fast / slow.** Adjust `scroll_delay` (seconds per frame).
 
-**Changed the GPIO pin and nothing works.** `pin` must be a name from `board` (CircuitPython), not a raw BCM number. Use `"D18"`, `"D21"`, etc. A restart is safest after changing this.
+**Changed the GPIO pin and nothing works.** Edit `pin` directly in `app/config/config.json` (it is intentionally not on the `/config` page — a wrong value bricks the LEDs and is only recoverable via SSH). It must be a name from `board` (CircuitPython), not a raw BCM number. Use `"D18"`, `"D21"`, etc. Restart the server after changing it.
 
 **Captive portal redirects to the wrong address.** Edit `portal_redirect` in `app/config/config.json` by hand and restart. Don't save via `/config` afterwards or the key will be removed (see the quirk above).
 

@@ -83,15 +83,18 @@ A live 30×30 grid of `<div>` cells that mirrors the matrix shadow buffer in the
 
 Especially useful with `DISABLE_MATRIX=1` — the whole app is usable without LED hardware.
 
+> **Auto-hidden when hardware is attached.** When `matrixpi.matrixboard.hardware` is `True`, the preview nav-link disappears and both `/preview` and `/preview/state` return `404`. The physical LEDs are the source of truth in that case — a second on-screen copy would just lag behind. This is driven by the `hardware_enabled` template flag injected by `inject_hardware_state()` in `app/__init__.py`.
+
 ### Config Page (`config.html`)
 
 Form that saves to `app/config/config.json`. Settings:
 
 | Setting | Description |
 |---------|-------------|
-| GPIO pin | NeoPixel data pin (default: D18) |
 | Brightness | 0.0 – 1.0 |
 | auto_write | If true, LEDs update immediately on each pixel set (slower) |
+
+> The `pin` (GPIO data line) is intentionally not exposed on this page — see [Config.md](Config.md) for why and how to change it.
 | Scroll delay | Seconds between scroll frames |
 | Font baseline offset | Vertical pixel offset for text rendering |
 | GIF speed multiplier | 1.0 = normal speed; lower = faster |

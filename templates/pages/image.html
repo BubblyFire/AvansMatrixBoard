@@ -3,6 +3,10 @@
 {% block head %}
   {{ super() }}
   <script type="module" src="/js/server.js" defer></script>
+  <style>
+    /* Ensure every Pi-browser row hits the 44px touch-target minimum on mobile. */
+    #piBrowser > * { min-height: 44px; display: flex; align-items: center; }
+  </style>
 {% endblock head %}
 
 {% block title %}Image{% endblock title %}

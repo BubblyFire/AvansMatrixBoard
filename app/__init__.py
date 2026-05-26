@@ -58,6 +58,12 @@ def create_app(debug: bool = False):
 
         return {'t': t, 'current_lang': lang}
 
+    # The live web preview only makes sense when no real LEDs are attached;
+    # with hardware connected the matrix itself is the source of truth.
+    @app.context_processor
+    def inject_hardware_state():
+        return {'hardware_enabled': bool(matrixpi.matrixboard and matrixpi.matrixboard.hardware)}
+
     # Route to switch the UI language, stored in the session
     @app.route('/set-language/<lang>')
     def set_language(lang):

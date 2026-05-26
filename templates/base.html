@@ -14,6 +14,21 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/extern/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+      /* Actions block (badge, clear button, language switcher) lives inside the
+         navbar collapse on mobile so the top row only has brand + hamburger. */
+      .navbar-actions { gap: 0.25rem; }
+      .navbar-actions #nowPlayingBadge {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100%;
+      }
+      @media (min-width: 768px) {
+        .navbar-actions #nowPlayingBadge { max-width: 180px; }
+      }
+    </style>
     {% endblock head %}
     <title>{% block title %}{% endblock title %} - AvansMatrixBoard</title>
 </head>
@@ -38,19 +53,6 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
   <div class="container">
     <a class="navbar-brand" href="{{ url_for('pages.core.home_route') }}">AvansMatrixBoard</a>
-
-    <!-- Always visible: now playing badge + clear button + language switcher -->
-    <div class="d-flex align-items-center ml-auto mr-2">
-      <span id="nowPlayingBadge" class="badge badge-pill px-2 py-1 mr-2" style="font-size:0.75rem; display:none;"></span>
-      <button id="clearMatrixBtn" type="button" class="btn btn-sm btn-outline-light mr-2" style="font-size:0.75rem;">
-        {{ t('nav.clear') }}
-      </button>
-      {% if current_lang == 'en' %}
-        <a class="nav-link text-white py-0" href="{{ url_for('set_language', lang='nl') }}">NL</a>
-      {% else %}
-        <a class="nav-link text-white py-0" href="{{ url_for('set_language', lang='en') }}">EN</a>
-      {% endif %}
-    </div>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar"
             aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,12 +103,14 @@
           </a>
         </li>
 
+        {% if not hardware_enabled %}
         <li class="nav-item">
           <a class="nav-link {% if request.endpoint == 'pages.core.preview_route' %}active{% endif %}"
             href="{{ url_for('pages.core.preview_route') }}">
             {{ t('nav.preview') }}
           </a>
         </li>
+        {% endif %}
 
         <li class="nav-item">
           <a class="nav-link {% if request.endpoint == 'pages.core.config_page' %}active{% endif %}"
@@ -115,6 +119,25 @@
           </a>
         </li>
       </ul>
+
+      <!-- Actions: stacked vertically on mobile (inside collapsed menu),
+           inline on desktop (right side of navbar). -->
+      <div class="navbar-actions d-flex flex-column flex-md-row align-items-md-center py-2 py-md-0">
+        <span id="nowPlayingBadge"
+              class="badge badge-pill px-2 py-1 mb-2 mb-md-0 mr-md-2"
+              style="font-size:0.75rem; display:none;"></span>
+
+        <button id="clearMatrixBtn" type="button"
+                class="btn btn-sm btn-outline-light mb-2 mb-md-0 mr-md-2">
+          {{ t('nav.clear') }}
+        </button>
+
+        {% if current_lang == 'en' %}
+          <a class="nav-link text-white py-0" href="{{ url_for('set_language', lang='nl') }}">NL</a>
+        {% else %}
+          <a class="nav-link text-white py-0" href="{{ url_for('set_language', lang='en') }}">EN</a>
+        {% endif %}
+      </div>
     </div>
   </div>
 </nav>
